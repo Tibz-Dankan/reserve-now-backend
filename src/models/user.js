@@ -1,50 +1,64 @@
-const { Sequelize, DataTypes } = require("sequelize");
-const dotenv = require("dotenv");
-dotenv.config();
+"use strict";
 
-const POSTGRES_URL = process.env.POSTGRES_URL;
-const sequelize = new Sequelize(POSTGRES_URL);
+const { Model } = require("sequelize");
 
-const Users = sequelize.define("users", {
-  id: {
-    type: DataTypes.STRING,
-    primaryKey: true,
-    autoIncrement: true,
-  },
-  name: {
-    type: DataTypes.STRING,
-    allowNull: false,
-  },
-  email: {
-    type: DataTypes.STRING,
-    allowNull: false,
-    unique: true,
-    validate: {
-      isEmail: true,
+module.exports = (sequelize, DataTypes) => {
+  class User extends Model {
+    /**
+     * Helper method for defining associations.
+     * This method is not a part of Sequelize lifecycle.
+     * The `models/index` file will call this method automatically.
+     */
+    static associate(models) {
+      // define association here
+    }
+  }
+
+  User.init(
+    {
+      id: {
+        type: DataTypes.STRING,
+        primaryKey: true,
+        autoIncrement: true,
+      },
+      name: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      email: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        unique: true,
+        validate: {
+          isEmail: true,
+        },
+      },
+      password: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      country: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      role: {
+        type: DataTypes.ENUM("user", "client", "staff", "admin"),
+        defaultValue: "user",
+      },
+      createdAt: {
+        type: DataTypes.DATE,
+        defaultValue: Sequelize.NOW,
+      },
+      updatedAt: {
+        type: DataTypes.DATE,
+        defaultValue: Sequelize.NOW,
+      },
     },
-  },
-  password: {
-    type: DataTypes.STRING,
-    allowNull: false,
-  },
-  country: {
-    type: DataTypes.STRING,
-    allowNull: false,
-  },
-  role: {
-    type: DataTypes.ENUM("user", "client", "staff", "admin"),
-    defaultValue: "user",
-  },
-  createdAt: {
-    type: DataTypes.DATE,
-    defaultValue: Sequelize.NOW,
-  },
-  updatedAt: {
-    type: DataTypes.DATE,
-    defaultValue: Sequelize.NOW,
-  },
-});
+    {
+      sequelize,
+      modelName: "User",
+    }
+  );
 
-// TODO: include virtuals, getters and setters
-
-module.exports = Users;
+  return User;
+};
