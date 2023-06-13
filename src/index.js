@@ -8,7 +8,10 @@ const startApp = async () => {
   const POSTGRES_URL = process.env.POSTGRES_URL;
   const PORT = 8000 || process.env.PORT;
 
-  //TODO: validate the url(ensure presence)
+  if (!POSTGRES_URL) {
+    console.log("No postgres url");
+    throw new Error("No postgres url");
+  }
 
   try {
     const sequelize = new Sequelize(POSTGRES_URL);
