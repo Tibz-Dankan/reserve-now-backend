@@ -2,10 +2,10 @@ const { Sequelize, DataTypes } = require("sequelize");
 const dotenv = require("dotenv");
 dotenv.config();
 
-const POSTGRES_URI = process.env.POSTGRES_URI;
-const sequelize = new Sequelize(POSTGRES_URI);
+const POSTGRES_URL = process.env.POSTGRES_URL;
+const sequelize = new Sequelize(POSTGRES_URL);
 
-const Users = sequelize.define("Users", {
+const Users = sequelize.define("users", {
   id: {
     type: DataTypes.STRING,
     primaryKey: true,

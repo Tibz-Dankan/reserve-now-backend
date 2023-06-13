@@ -5,11 +5,13 @@ const { app } = require("./app");
 dotenv.config();
 
 const startApp = async () => {
-  const POSTGRES_URI = process.env.POSTGRES_URI;
+  const POSTGRES_URL = process.env.POSTGRES_URL;
   const PORT = 8000 || process.env.PORT;
 
+  //TODO: validate the url(ensure presence)
+
   try {
-    const sequelize = new Sequelize(POSTGRES_URI);
+    const sequelize = new Sequelize(POSTGRES_URL);
 
     await sequelize.authenticate();
     console.log("Database connection has been established successfully!");
