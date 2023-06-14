@@ -1,8 +1,8 @@
-const { User } = require("../models/user"); // To be corrected
+const User = require("../models").User; // To be corrected
 const { AppError } = require("../utils/error");
 const { asyncHandler } = require("../utils/asyncHandler");
-const { AuthToken } = require("../utils/token"); // The code to transferred to this file
-const { Email } = require("../utils/email");
+const { Auth } = require("../utils/auth");
+// const { Email } = require("../utils/email");
 const { createHash } = require("crypto");
 
 const signup = asyncHandler(async (req, res, next) => {
@@ -23,7 +23,7 @@ const signup = asyncHandler(async (req, res, next) => {
   const newUser = User.build({ username, email, password });
   await newUser.save();
 
-  await new AuthToken(newUser, 201, res).send();
+  await new Auth(newUser, 201, res).send();
 });
 
 const signin = asyncHandler(async (req, res, next) => {
@@ -37,7 +37,7 @@ const signin = asyncHandler(async (req, res, next) => {
   if (!user || !(await User.correctPassword(password, user.password))) {
     return next(new AppError("Invalid email or password", 400));
   }
-  await new AuthToken(user, 200, res).send();
+  await new Auth(user, 200, res).send();
 });
 
 const forgotPassword = asyncHandler(async (req, res, next) => {
@@ -85,7 +85,7 @@ const resetPassword = asyncHandler(async (req, res, next) => {
   user.passwordResetExpires = undefined;
   await user.save();
 
-  await new AuthToken(user, 200, res).send();
+  await new Auth(user, 200, res).send();
 });
 
 module.exports = { signup, signin, forgotPassword, resetPassword };

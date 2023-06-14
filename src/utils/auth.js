@@ -3,7 +3,7 @@ const dotenv = require("dotenv");
 
 dotenv.config();
 
-export class AuthToken {
+class Auth {
   user;
   statusCode;
   res;
@@ -42,3 +42,5 @@ export class AuthToken {
     });
   }
 }
+
+module.exports = { Auth };
