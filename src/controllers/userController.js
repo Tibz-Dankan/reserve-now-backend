@@ -1,4 +1,4 @@
-const User = require("../models").User; // To be corrected
+const User = require("../models").User;
 const { AppError } = require("../utils/error");
 const { asyncHandler } = require("../utils/asyncHandler");
 const { Auth } = require("../utils/auth");
@@ -6,21 +6,23 @@ const { Auth } = require("../utils/auth");
 const { createHash } = require("crypto");
 
 const signup = asyncHandler(async (req, res, next) => {
-  const username = req.body.username;
+  const name = req.body.name;
   const email = req.body.email;
   const password = req.body.password;
+  const country = req.body.country;
+
   console.log(req.body);
 
-  if (!username || !email || !password) {
+  if (!name || !email || !password) {
     return next(new AppError("Please fill out all fields", 400));
   }
   if (!email.includes("@")) {
     return next(new AppError("Please supply a valid email", 400));
   }
-  const user = await User.findOne({ email });
+  const user = await User.findOne({ where: { email: email } });
   if (user) return next(new AppError("Email already registered", 400));
 
-  const newUser = User.build({ username, email, password });
+  const newUser = User.build(req.body);
   await newUser.save();
 
   await new Auth(newUser, 201, res).send();
@@ -33,8 +35,8 @@ const signin = asyncHandler(async (req, res, next) => {
   if (!email || !password) {
     return next(new AppError("Please fill out all fields", 400));
   }
-  const user = await User.findOne({ email });
-  if (!user || !(await User.correctPassword(password, user.password))) {
+  const user = await User.findOne({ where: { email: email } });
+  if (!user || !(await user.correctPassword(password, user.password))) {
     return next(new AppError("Invalid email or password", 400));
   }
   await new Auth(user, 200, res).send();
@@ -44,7 +46,7 @@ const forgotPassword = asyncHandler(async (req, res, next) => {
   const email = req.body.email;
 
   if (!email) return next(new AppError("Please fill out all fields", 400));
-  const user = await User.findOne({ email });
+  const user = await User.findOne({ where: { email: email } });
 
   if (!user) {
     return next(new AppError("There is no user with supplied email", 404));
