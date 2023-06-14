@@ -2,7 +2,7 @@ const User = require("../models").User;
 const { AppError } = require("../utils/error");
 const { asyncHandler } = require("../utils/asyncHandler");
 const { Auth } = require("../utils/auth");
-// const { Email } = require("../utils/email");
+const { Email } = require("../utils/email");
 const { createHash } = require("crypto");
 
 const signup = asyncHandler(async (req, res, next) => {
