@@ -4,6 +4,7 @@ const { asyncHandler } = require("../utils/asyncHandler");
 const { Auth } = require("../utils/auth");
 const { Email } = require("../utils/email");
 const { createHash } = require("crypto");
+const { Op } = require("sequelize");
 
 const signup = asyncHandler(async (req, res, next) => {
   const name = req.body.name;
@@ -36,6 +37,7 @@ const signin = asyncHandler(async (req, res, next) => {
     return next(new AppError("Please fill out all fields", 400));
   }
   const user = await User.findOne({ where: { email: email } });
+  console.log(user);
   if (!user || !(await user.correctPassword(password, user.password))) {
     return next(new AppError("Invalid email or password", 400));
   }
@@ -53,7 +55,8 @@ const forgotPassword = asyncHandler(async (req, res, next) => {
   }
 
   const resetToken = user.createPasswordResetToken();
-  await user.save({ validateBeforeSave: false });
+  console.log(resetToken);
+  await user.save();
 
   const resetURL = `${req.protocol}://localhost:3000/reset-password/${resetToken}`;
   const subject = "Reset Password";
@@ -61,7 +64,7 @@ const forgotPassword = asyncHandler(async (req, res, next) => {
   console.log("resetURL");
   console.log(resetURL);
 
-  await new Email(email, subject).sendPasswordReset(resetURL, user.username);
+  await new Email(email, subject).sendPasswordReset(resetURL, user.name);
 
   res.status(200).json({
     status: "success",
@@ -75,8 +78,10 @@ const resetPassword = asyncHandler(async (req, res, next) => {
   const hashedToken = createHash("sha256").update(token).digest("hex");
 
   const user = await User.findOne({
-    passwordResetToken: hashedToken,
-    passwordResetExpires: { $gt: Date.now() },
+    where: {
+      passwordResetToken: hashedToken,
+      passwordResetExpires: { [Op.gt]: Date.now() },
+    },
   });
 
   if (!user) {

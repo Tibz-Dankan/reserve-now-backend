@@ -1,6 +1,7 @@
 "use strict";
 
 const { hash, compare, genSalt } = require("bcryptjs");
+const { createHash, randomBytes } = require("crypto");
 const { Model, Sequelize } = require("sequelize");
 
 module.exports = (sequelize, DataTypes) => {
@@ -16,6 +17,19 @@ module.exports = (sequelize, DataTypes) => {
 
     async correctPassword(password) {
       return await compare(password, this.password);
+    }
+
+    createPasswordResetToken() {
+      console.log("Running create reset token");
+      const resetToken = randomBytes(32).toString("hex");
+
+      this.setDataValue(
+        "passwordResetToken",
+        createHash("sha256").update(resetToken).digest("hex")
+      );
+      this.setDataValue("passwordResetExpires", Date.now() + 20 * 60 * 1000);
+
+      return resetToken;
     }
   }
 
@@ -57,6 +71,12 @@ module.exports = (sequelize, DataTypes) => {
       updatedAt: {
         type: DataTypes.DATE,
         defaultValue: Sequelize.NOW,
+      },
+      passwordResetToken: {
+        type: DataTypes.STRING,
+      },
+      passwordResetExpires: {
+        type: DataTypes.DATE,
       },
     },
     {
