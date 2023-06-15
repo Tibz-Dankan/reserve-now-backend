@@ -4,7 +4,7 @@ const {
   signin,
   resetPassword,
   forgotPassword,
-} = require("../controllers/userController");
+} = require("../../controllers/userController");
 
 const router = express.Router();
 
