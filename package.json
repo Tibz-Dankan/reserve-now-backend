@@ -8,8 +8,8 @@
     "dev": "nodemon src/index.js",
     "migrate": "npx sequelize-cli db:migrate",
     "undo-migrate": "npx sequelize-cli db:migrate:undo",
-    "migrate-test": "npx sequelize-cli sequelize db:migrate --env test",
-    "undo-migrate-test": "npx sequelize-cli sequelize db:migrate:undo --env test",
+    "migrate-test": "npx sequelize-cli db:migrate --env test",
+    "undo-migrate-test": "npx sequelize-cli db:migrate:undo --env test",
     "test": "jest --watchAll --no-cache --detectOpenHandles"
   },
   "jest": {
