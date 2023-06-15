@@ -8,6 +8,7 @@ module.exports = {
     dialectOptions: {
       bigNumberStrings: true,
     },
+    logging: true,
   },
   test: {
     url: `${process.env.TEST_POSTGRES_URL}`,
