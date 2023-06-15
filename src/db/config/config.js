@@ -10,7 +10,7 @@ module.exports = {
     },
   },
   test: {
-    url: `${process.env.CI_POSTGRES_URL}`,
+    url: `${process.env.TEST_POSTGRES_URL}`,
     dialect: "postgres",
     dialectOptions: {
       bigNumberStrings: true,
