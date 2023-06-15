@@ -1,28 +1,98 @@
-// const { Sequelize } = require("sequelize");
-const db = require("../models");
+// Function to check if a table exists
+const tableExists = async (sequelize, tableName) => {
+  const query = `
+        SELECT EXISTS (
+          SELECT 1
+          FROM information_schema.tables
+          WHERE table_name = '${tableName}'
+        );
+      `;
+
+  try {
+    const result = await sequelize.query(query, {
+      type: sequelize.QueryTypes.SELECT,
+    });
+
+    const exists = result[0].exists;
+    return exists == true;
+  } catch (error) {
+    console.log("Error checking table existence:", error);
+    return false;
+  }
+};
+
+const createTable = async (sequelize) => {
+  (async () => {
+    try {
+      await sequelize.sync();
+      console.log("Table created successfully");
+    } catch (error) {
+      console.log("Error creating table:", error);
+    }
+  })();
+};
+
+const dropTable = async (sequelize, table) => {
+  await sequelize.query(`DROP TABLE IF EXISTS ${table}`);
+};
+
+const { Sequelize } = require("sequelize");
+// const db = require("../models");
+const dotenv = require("dotenv");
+const { sequelize } = require("../models/index");
+
+dotenv.config();
 
 // let sequelize;
-const sequelize = db.sequelize;
+// const sequelize = db.sequelize;
 
 // beforeAll(async () => {
 //   //   const TEST_POSTGRES_URL = process.env.TEST_POSTGRES_URL;
 //   //   sequelize = new Sequelize(TEST_POSTGRES_URL);
 
-// //   await sequelize.authenticate();
+//   await sequelize.authenticate();
+// //   await createTable(sequelize);
 // });
 
 // beforeAll(async () => {
-beforeEach(async () => {
-  await sequelize.sync({ force: true });
-});
+//   // beforeEach(async () => {
+//   await sequelize.sync({ force: true });
+// });
 
 // beforeEach(async () => {
-//   const tables = Object.values(sequelize.models);
+beforeAll(async () => {
+  const tables = Object.values(sequelize.models);
 
-//   for (let table of tables) {
-//     await table.destroy({ truncate: true, cascade: true });
-//   }
-// });
+  //   for (let table of tables) {
+  //     const exists = await tableExists(sequelize, table);
+
+  //     if (exists) {
+  //       console.log("Table exists");
+  //       //   await dropTable(sequelize, table);
+  //       //   await createTable(sequelize);
+  //       table.destroy({ truncate: true });
+  //     } else {
+  //       // Create all the tables
+  //       console.log("Table does not exist, create one");
+  //       await createTable(sequelize);
+  //     }
+  //   }
+
+  tables.map(async (table) => {
+    const exists = await tableExists(sequelize, table);
+
+    if (exists) {
+      console.log("Table exists");
+      //   await dropTable(sequelize, table);
+      //   await createTable(sequelize);
+      table.destroy({ truncate: true });
+    } else {
+      // Create all the tables
+      console.log("Table does not exist, create one");
+      await createTable(sequelize);
+    }
+  });
+});
 
 afterAll(async () => {
   await sequelize.close();
@@ -42,3 +112,9 @@ afterAll(async () => {
 // "scripts":{
 //     "test": "jest --watchAll --no-cache --detectOpenHandles"
 // }
+
+// Working script jest
+// "db:reset": "npx sequelize-cli db:drop && npx sequelize-cli db:create && npx sequelize-cli db:migrate",
+// "test": "cross-env NODE_ENV=test jest --testTimeout=10000",
+// "pretest": "cross-env NODE_ENV=test npm run db:reset",
+// "db:create:test": "cross-env NODE_ENV=test npx sequelize-cli db:create"
