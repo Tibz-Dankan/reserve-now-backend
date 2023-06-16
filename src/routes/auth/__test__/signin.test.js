@@ -41,6 +41,15 @@ describe("test the signin api end point", () => {
 
   it("returns 400 when email is invalid", async () => {
     await request(app)
+      .post("/v1/api/users/signup")
+      .send({
+        name: "test user",
+        email: "test@test.com",
+        password: "password",
+        country: "country",
+      })
+      .expect(201);
+    await request(app)
       .post("/v1/api/users/signin")
       .send({
         email: "t@test.com",
@@ -51,6 +60,15 @@ describe("test the signin api end point", () => {
 
   it("returns 400 when password is invalid", async () => {
     await request(app)
+      .post("/v1/api/users/signup")
+      .send({
+        name: "test user",
+        email: "test@test.com",
+        password: "password",
+        country: "country",
+      })
+      .expect(201);
+    await request(app)
       .post("/v1/api/users/signin")
       .send({
         email: "test@test.com",
@@ -60,6 +78,15 @@ describe("test the signin api end point", () => {
   });
 
   it("expects a token after signin", async () => {
+    await request(app)
+      .post("/v1/api/users/signup")
+      .send({
+        name: "test user",
+        email: "test@test.com",
+        password: "password",
+        country: "country",
+      })
+      .expect(201);
     const res = await request(app)
       .post("/v1/api/users/signin")
       .send({
