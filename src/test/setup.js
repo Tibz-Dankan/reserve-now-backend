@@ -54,43 +54,25 @@ dotenv.config();
 // //   await createTable(sequelize);
 // });
 
-// beforeAll(async () => {
-//   // beforeEach(async () => {
-//   await sequelize.sync({ force: true });
-// });
+const tables = Object.values(sequelize.models);
 
-// beforeEach(async () => {
 beforeAll(async () => {
-  const tables = Object.values(sequelize.models);
-
-  //   for (let table of tables) {
-  //     const exists = await tableExists(sequelize, table);
-
-  //     if (exists) {
-  //       console.log("Table exists");
-  //       //   await dropTable(sequelize, table);
-  //       //   await createTable(sequelize);
-  //       table.destroy({ truncate: true });
-  //     } else {
-  //       // Create all the tables
-  //       console.log("Table does not exist, create one");
-  //       await createTable(sequelize);
-  //     }
-  //   }
+  // await sequelize.sync({ force: true });
 
   tables.map(async (table) => {
     const exists = await tableExists(sequelize, table);
 
-    if (exists) {
-      console.log("Table exists");
-      //   await dropTable(sequelize, table);
-      //   await createTable(sequelize);
-      table.destroy({ truncate: true });
-    } else {
-      // Create all the tables
-      console.log("Table does not exist, create one");
+    if (!exists) {
       await createTable(sequelize);
     }
+  });
+});
+
+beforeEach(async () => {
+  // const tables = Object.values(sequelize.models);
+
+  tables.map(async (table) => {
+    table.destroy({ truncate: true });
   });
 });
 
