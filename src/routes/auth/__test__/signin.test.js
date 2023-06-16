@@ -1,6 +1,5 @@
 const request = require("supertest");
 const { app } = require("../../../app");
-const db = require("../../../models");
 
 describe("test the signin api end point", () => {
   it("returns a 200 on successful signin", async () => {
