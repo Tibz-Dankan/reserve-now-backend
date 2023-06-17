@@ -66,8 +66,6 @@ const forgotPassword = asyncHandler(async (req, res, next) => {
 
   await new Email(email, subject).sendPasswordReset(resetURL, user.name);
 
-  res.locals.resetToken = resetToken;
-
   res.status(200).json({
     status: "success",
     message: "Password reset token sent to email",
