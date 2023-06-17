@@ -66,6 +66,8 @@ const forgotPassword = asyncHandler(async (req, res, next) => {
 
   await new Email(email, subject).sendPasswordReset(resetURL, user.name);
 
+  res.locals.resetToken = resetToken;
+
   res.status(200).json({
     status: "success",
     message: "Password reset token sent to email",
@@ -87,6 +89,9 @@ const resetPassword = asyncHandler(async (req, res, next) => {
   if (!user) {
     return next(new AppError("Token is invalid or has expired", 400));
   }
+  const newPassword = req.body.password;
+  if (!newPassword) return next(new AppError("Please supply  password", 400));
+
   user.password = req.body.password;
   user.passwordResetToken = undefined;
   user.passwordResetExpires = undefined;
