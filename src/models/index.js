@@ -45,11 +45,5 @@ Object.keys(db).forEach((modelName) => {
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 
-// model associations
-const Room = require("./room");
-const Bed = require("./bed");
-Room.associate({ Bed });
-Bed.associate({ Room });
-
 module.exports = { sequelize };
 module.exports = db;
