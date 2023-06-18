@@ -23,4 +23,14 @@ const getAllRooms = asyncHandler(async (req, res, next) => {
   res.status(200).json({ success: true, data: rooms });
 });
 
-module.exports = { addRoom, getAllRooms };
+const getRoomById = asyncHandler(async (req, res, next) => {
+  const id = req.params.id;
+  if (!id) return next(new AppError("No room id supplied", 400));
+
+  const room = await Room.findOne({ where: { id: id } });
+  if (!room) return next(new AppError("No room found", 404));
+
+  res.status(200).json({ success: true, data: room });
+});
+
+module.exports = { addRoom, getAllRooms, getRoomById };
