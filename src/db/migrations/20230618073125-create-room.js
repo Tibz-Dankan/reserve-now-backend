@@ -11,7 +11,7 @@ module.exports = {
       },
       roomNumber: {
         allowNull: false,
-        type: Sequelize.STRING,
+        type: Sequelize.INTEGER,
       },
       roomType: {
         allowNull: false,
