@@ -9,11 +9,11 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
-      number: {
+      roomNumber: {
         allowNull: false,
         type: Sequelize.STRING,
       },
-      type: {
+      roomType: {
         allowNull: false,
         type: Sequelize.STRING,
       },

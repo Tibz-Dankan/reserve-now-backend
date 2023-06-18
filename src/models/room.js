@@ -23,11 +23,11 @@ module.exports = (sequelize, DataTypes) => {
         primaryKey: true,
         autoIncrement: true,
       },
-      number: {
+      roomNumber: {
         type: DataTypes.INTEGER,
         allowNull: false,
       },
-      type: {
+      roomType: {
         type: DataTypes.STRING, //single, double, suite, deluxe, etc
         allowNull: false,
       },

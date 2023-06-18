@@ -23,7 +23,7 @@ module.exports = (sequelize, DataTypes) => {
         primaryKey: true,
         autoIncrement: true,
       },
-      type: {
+      bedType: {
         type: DataTypes.STRING,
         allowNull: false,
       },
