@@ -36,7 +36,7 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
       },
       isAvailable: {
-        type: DataTypes.ENUM("true", "false"),
+        type: DataTypes.BOOLEAN,
         defaultValue: true,
       },
       occupancyStatus: {

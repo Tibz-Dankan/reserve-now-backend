@@ -22,7 +22,7 @@ module.exports = {
         allowNull: false,
       },
       isAvailable: {
-        type: Sequelize.ENUM("true", "false"),
+        type: Sequelize.BOOLEAN,
         defaultValue: true,
       },
       occupancyStatus: {
