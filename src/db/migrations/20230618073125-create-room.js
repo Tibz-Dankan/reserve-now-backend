@@ -21,6 +21,9 @@ module.exports = {
         type: Sequelize.INTEGER,
         allowNull: false,
       },
+      imageUrl: {
+        type: Sequelize.STRING,
+      },
       isAvailable: {
         type: Sequelize.BOOLEAN,
         defaultValue: true,
@@ -36,7 +39,7 @@ module.exports = {
       amenities: {
         type: Sequelize.STRING,
       },
-      View: {
+      view: {
         type: Sequelize.STRING,
       },
       price: {

@@ -35,6 +35,9 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.INTEGER,
         allowNull: false,
       },
+      imageUrl: {
+        type: DataTypes.STRING,
+      },
       isAvailable: {
         type: DataTypes.BOOLEAN,
         defaultValue: true,
@@ -50,7 +53,7 @@ module.exports = (sequelize, DataTypes) => {
       amenities: {
         type: DataTypes.STRING,
       },
-      View: {
+      view: {
         type: DataTypes.STRING,
       },
       price: {
