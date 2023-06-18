@@ -17,4 +17,10 @@ const addRoom = asyncHandler(async (req, res, next) => {
   res.status(200).json({ success: true, data: newRoom });
 });
 
-module.exports = { addRoom };
+const getAllRooms = asyncHandler(async (req, res, next) => {
+  const rooms = await Room.findAll();
+
+  res.status(200).json({ success: true, data: rooms });
+});
+
+module.exports = { addRoom, getAllRooms };
