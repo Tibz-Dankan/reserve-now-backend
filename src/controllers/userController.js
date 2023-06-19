@@ -5,6 +5,7 @@ const { Auth } = require("../utils/auth");
 const { Email } = require("../utils/email");
 const { createHash } = require("crypto");
 const { Op } = require("sequelize");
+const jwt = require("jsonwebtoken");
 
 const signup = asyncHandler(async (req, res, next) => {
   const name = req.body.name;
@@ -98,4 +99,27 @@ const resetPassword = asyncHandler(async (req, res, next) => {
   await new Auth(user, 200, res).send();
 });
 
-module.exports = { signup, signin, forgotPassword, resetPassword };
+const protect = asyncHandler(async (req, res, next) => {
+  const authHeader = req.headers["authorization"];
+  let token;
+  if (authHeader && authHeader.startsWith("Bearer")) {
+    token = authHeader.split(" ")[1];
+  }
+  if (!token) {
+    return next(new AppError("You are not logged! Please to get access", 400));
+  }
+  const decoded = jwt.verify(token, process.env.JWT_SECRET);
+  const id = decoded.id;
+
+  const user = await User.findOne({ where: { id: id } });
+  if (!user) {
+    return next(
+      new AppError("The user belonging to this token no exists!", 403)
+    );
+  }
+  req["user"] = user;
+  res.locals.user = user;
+  next();
+});
+
+module.exports = { signup, signin, forgotPassword, resetPassword, protect };
