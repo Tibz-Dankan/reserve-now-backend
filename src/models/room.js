@@ -38,6 +38,9 @@ module.exports = (sequelize, DataTypes) => {
       imageUrl: {
         type: DataTypes.STRING,
       },
+      imagePath: {
+        type: DataTypes.STRING,
+      },
       isAvailable: {
         type: DataTypes.BOOLEAN,
         defaultValue: true,

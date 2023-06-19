@@ -2,6 +2,9 @@ const Room = require("../models").Room;
 const { AppError } = require("../utils/error");
 const { asyncHandler } = require("../utils/asyncHandler");
 
+const { Upload } = require("../utils/upload");
+const path = require("path");
+
 const addRoom = asyncHandler(async (req, res, next) => {
   const { roomNumber, roomType, capacity, price, priceCurrency } = req.body;
 
@@ -60,4 +63,25 @@ const updateRoom = asyncHandler(async (req, res, next) => {
   res.status(200).json({ status: "success", data: room });
 });
 
-module.exports = { addRoom, getAllRooms, getRoom, updateRoom };
+const updateRoomImage = asyncHandler(async (req, res, next) => {
+  console.log(req.file);
+
+  const file = req.file;
+  const id = req.params.id;
+  if (!id) return next(new AppError("No room id is provided", 400));
+  if (!file) return next(new AppError("Please provide a room image", 400));
+  // TODO: validate to ensure the file is image
+
+  const imagePath = `rooms/${Date.now()}_${file.originalname}`;
+  const upload = await new Upload(imagePath, next).add(file);
+  const url = upload.url;
+
+  const updateImage = await Room.update(
+    { imageUrl: url, imagePath: imagePath },
+    { where: { id: id } }
+  );
+
+  res.status(200).json({ status: "success", data: updateImage });
+});
+
+module.exports = { addRoom, getAllRooms, getRoom, updateRoom, updateRoomImage };

@@ -24,6 +24,9 @@ module.exports = {
       imageUrl: {
         type: Sequelize.STRING,
       },
+      imagePath: {
+        type: Sequelize.STRING,
+      },
       isAvailable: {
         type: Sequelize.BOOLEAN,
         defaultValue: true,
