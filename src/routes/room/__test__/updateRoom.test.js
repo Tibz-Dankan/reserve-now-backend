@@ -28,8 +28,7 @@ describe("test updateRoom API endpoint", () => {
     const roomId = addRoomResponse.body.data.id;
 
     await request(app)
-      .patch("/v1/api/rooms/update-room/:id")
-      .query({ id: roomId })
+      .patch(`/v1/api/rooms/update-room/${roomId}`)
       .send({
         roomNumber: "",
         roomType: "Standard",
@@ -41,8 +40,7 @@ describe("test updateRoom API endpoint", () => {
       .expect(400);
 
     await request(app)
-      .patch("/v1/api/rooms/update-room/:id")
-      .query({ id: roomId })
+      .patch(`/v1/api/rooms/update-room/${roomId}`)
       .send({
         roomNumber: "1",
         roomType: "",
@@ -54,8 +52,7 @@ describe("test updateRoom API endpoint", () => {
       .expect(400);
 
     await request(app)
-      .patch("/v1/api/rooms/update-room/:id")
-      .query({ id: roomId })
+      .patch(`/v1/api/rooms/update-room/${roomId}`)
       .send({
         roomNumber: "2",
         roomType: "Standard",
@@ -67,8 +64,7 @@ describe("test updateRoom API endpoint", () => {
       .expect(400);
 
     await request(app)
-      .patch("/v1/api/rooms/update-room/:id")
-      .query({ id: roomId })
+      .patch(`/v1/api/rooms/update-room/${roomId}`)
       .send({
         roomNumber: "2",
         roomType: "Standard",
@@ -93,77 +89,63 @@ describe("test updateRoom API endpoint", () => {
       .expect(400);
   });
 
-  // it("returns 404 if no room is found", async () => {
-  //   const signupResponse = await request(app)
-  //     .post("/v1/api/users/signup")
-  //     .send({
-  //       name: "test user",
-  //       email: "test@test.com",
-  //       password: "password",
-  //       country: "country",
-  //     })
-  //     .expect(201);
-  //   // const addRoomResponse = await request(app)
-  //   //   .post("/v1/api/rooms/add-room")
-  //   //   .send({
-  //   //     roomNumber: "101",
-  //   //     roomType: "Standard",
-  //   //     capacity: 2,
-  //   //     price: 100,
-  //   //     priceCurrency: "USD",
-  //   //   })
-  //   //   .set("Authorization", `Bearer ${signupResponse.body.token}`)
-  //   //   .expect(201);
-  //   // const roomId = addRoomResponse.body.data.id;
+  it("returns 404 if no room is found", async () => {
+    const signupResponse = await request(app)
+      .post("/v1/api/users/signup")
+      .send({
+        name: "test user",
+        email: "test@test.com",
+        password: "password",
+        country: "country",
+      })
+      .expect(201);
 
-  //   await request(app)
-  //     .patch(`/v1/api/rooms/update-room/:id`)
-  //     .query({ id: "1000" })
-  //     .send({
-  //       roomNumber: "5",
-  //       roomType: "Standard",
-  //       capacity: "2",
-  //       price: "100",
-  //       priceCurrency: "USD",
-  //     })
-  //     .set("Authorization", `Bearer ${signupResponse.body.token}`)
-  //     .expect(400);
-  // });
+    await request(app)
+      .patch(`/v1/api/rooms/update-room/1000`)
+      .send({
+        roomNumber: "5",
+        roomType: "Standard",
+        capacity: "2",
+        price: "100",
+        priceCurrency: "USD",
+      })
+      .set("Authorization", `Bearer ${signupResponse.body.token}`)
+      .expect(404);
+  });
 
-  // it("expects 200 on successful room update", async () => {
-  //   const signupResponse = await request(app)
-  //     .post("/v1/api/users/signup")
-  //     .send({
-  //       name: "test user",
-  //       email: "test@test.com",
-  //       password: "password",
-  //       country: "country",
-  //     })
-  //     .expect(201);
-  //   const addRoomResponse = await request(app)
-  //     .post("/v1/api/rooms/add-room")
-  //     .send({
-  //       roomNumber: "101",
-  //       roomType: "Standard",
-  //       capacity: "2",
-  //       price: "100",
-  //       priceCurrency: "USD",
-  //     })
-  //     .set("Authorization", `Bearer ${signupResponse.body.token}`)
-  //     .expect(201);
-  //   const roomId = addRoomResponse.body.data.id;
+  it("expects 200 on successful room update", async () => {
+    const signupResponse = await request(app)
+      .post("/v1/api/users/signup")
+      .send({
+        name: "test user",
+        email: "test@test.com",
+        password: "password",
+        country: "country",
+      })
+      .expect(201);
+    const addRoomResponse = await request(app)
+      .post("/v1/api/rooms/add-room")
+      .send({
+        roomNumber: "101",
+        roomType: "Standard",
+        capacity: "2",
+        price: "100",
+        priceCurrency: "USD",
+      })
+      .set("Authorization", `Bearer ${signupResponse.body.token}`)
+      .expect(201);
+    const roomId = addRoomResponse.body.data.id;
 
-  //   await request(app)
-  //     .patch(`/v1/api/rooms/update-room/:id`)
-  //     .query({ id: `${roomId}` })
-  //     .send({
-  //       roomNumber: "103",
-  //       roomType: "Deluxe",
-  //       capacity: "2",
-  //       price: "100",
-  //       priceCurrency: "USD",
-  //     })
-  //     .set("Authorization", `Bearer ${signupResponse.body.token}`)
-  //     .expect(200);
-  // });
+    await request(app)
+      .patch(`/v1/api/rooms/update-room/${roomId}`)
+      .send({
+        roomNumber: "103",
+        roomType: "Deluxe",
+        capacity: "2",
+        price: "100",
+        priceCurrency: "USD",
+      })
+      .set("Authorization", `Bearer ${signupResponse.body.token}`)
+      .expect(200);
+  });
 });

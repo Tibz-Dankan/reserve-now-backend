@@ -36,32 +36,7 @@ const getRoom = asyncHandler(async (req, res, next) => {
   res.status(200).json({ status: "success", data: room });
 });
 
-const dotenv = require("dotenv");
-dotenv.config();
-
 const updateRoom = asyncHandler(async (req, res, next) => {
-  // debugging
-  if (process.env.NODE_ENV === "development") {
-    console.log("development");
-    console.log("development");
-    console.log("development");
-    console.log("development");
-  }
-  console.log("req.params");
-  console.log(req.params);
-  console.log("req.body");
-  console.log(req.body);
-  if (process.env.NODE_ENV === "test") {
-    console.log("test");
-    console.log("test");
-    console.log("test");
-    console.log("test");
-    console.log("req.params");
-    console.log(req.params);
-    console.log("req.body");
-    console.log(req.body);
-  }
-
   const { roomNumber, roomType, capacity, price, priceCurrency } = req.body;
   const id = req.params.id;
   if (!id) return next(new AppError("No room id is supplied", 400));
