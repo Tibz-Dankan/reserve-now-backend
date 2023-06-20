@@ -1,6 +1,7 @@
 const Room = require("../models").Room;
 const { AppError } = require("../utils/error");
 const { asyncHandler } = require("../utils/asyncHandler");
+const mime = require("mime-types");
 
 const { Upload } = require("../utils/upload");
 const path = require("path");
@@ -69,8 +70,13 @@ const updateRoomImage = asyncHandler(async (req, res, next) => {
   const file = req.file;
   const id = req.params.id;
   if (!id) return next(new AppError("No room id is provided", 400));
-  if (!file) return next(new AppError("Please provide a room image", 400));
-  // TODO: validate to ensure the file is image
+  if (file == undefined) {
+    return next(new AppError("Please provide a room image", 400));
+  }
+
+  const mimeType = mime.lookup(file.originalname);
+  const isImage = mimeType && mimeType.startsWith("image");
+  if (!isImage) return next(new AppError("Please file of image type", 400));
 
   const imagePath = `rooms/${Date.now()}_${file.originalname}`;
   const upload = await new Upload(imagePath, next).add(file);
