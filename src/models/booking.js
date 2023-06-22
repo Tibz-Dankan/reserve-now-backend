@@ -17,6 +17,7 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: "userId",
         as: "user",
       });
+      // TODO: To define a one2one association btn booking and payment
     }
   }
   Booking.init(
@@ -30,6 +31,9 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.INTEGER,
       },
       roomId: {
+        type: DataTypes.INTEGER,
+      },
+      paymentId: {
         type: DataTypes.INTEGER,
       },
       checkInDate: {
@@ -50,6 +54,12 @@ module.exports = (sequelize, DataTypes) => {
       paymentStatus: {
         type: DataTypes.ENUM("paid", "unpaid"),
         defaultValue: "unpaid",
+      },
+      totalPrice: {
+        type: DataTypes.INTEGER,
+      },
+      priceCurrency: {
+        type: DataTypes.STRING,
       },
       specialRequests: {
         type: DataTypes.STRING,

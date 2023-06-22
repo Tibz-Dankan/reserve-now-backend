@@ -15,6 +15,9 @@ module.exports = {
       roomId: {
         type: Sequelize.INTEGER,
       },
+      paymentId: {
+        type: Sequelize.INTEGER,
+      },
       checkInDate: {
         type: Sequelize.DATE,
         allowNull: false,
@@ -33,6 +36,12 @@ module.exports = {
       paymentStatus: {
         type: Sequelize.ENUM("paid", "unpaid"),
         defaultValue: "unpaid",
+      },
+      totalPrice: {
+        type: Sequelize.INTEGER,
+      },
+      priceCurrency: {
+        type: Sequelize.STRING,
       },
       specialRequests: {
         type: Sequelize.STRING,
