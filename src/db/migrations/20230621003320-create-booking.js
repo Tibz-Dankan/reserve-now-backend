@@ -29,6 +29,14 @@ module.exports = {
       numOfGuests: {
         type: Sequelize.INTEGER,
       },
+      bookingStage: {
+        type: Sequelize.ENUM(
+          "selectBookingDates",
+          "selectRoom",
+          "selectPaymentOption"
+        ),
+        defaultValue: "selectBookingDates",
+      },
       bookingStatus: {
         type: Sequelize.ENUM("confirmed", "cancelled", "pending"),
         defaultValue: "pending",

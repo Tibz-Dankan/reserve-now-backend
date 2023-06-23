@@ -47,6 +47,14 @@ module.exports = (sequelize, DataTypes) => {
       numOfGuests: {
         type: DataTypes.INTEGER,
       },
+      bookingStage: {
+        type: DataTypes.ENUM(
+          "selectBookingDates",
+          "selectRoom",
+          "selectPaymentOption"
+        ),
+        defaultValue: "selectBookingDates",
+      },
       bookingStatus: {
         type: DataTypes.ENUM("confirmed", "cancelled", "pending"),
         defaultValue: "pending",
