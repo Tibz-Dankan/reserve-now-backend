@@ -2,6 +2,7 @@ const express = require("express");
 const {
   addBookingDates,
   updateBookingWithRoom,
+  getBooking,
 } = require("../../controllers/bookingController");
 const { protect } = require("../../controllers/userController");
 
@@ -13,6 +14,7 @@ router.patch(
   protect,
   updateBookingWithRoom
 );
+router.get("/api/booking/get-booking/:id", protect, getBooking);
 
 const bookingRoutes = router;
 
