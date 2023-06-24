@@ -27,4 +27,14 @@ const addBookingDates = asyncHandler(async (req, res, next) => {
   res.status(201).json({ status: "success", data: bookingDates });
 });
 
-module.exports = { addBookingDates };
+const updateBookingWithRoom = asyncHandler(async (req, res, next) => {
+  const id = req.params.id;
+  const roomId = req.body.roomId;
+  if (!id) return next(new AppError("please provide booking id", 400));
+  if (!roomId) return next(new AppError("please provide room id", 400));
+  req.body.bookingStage = "selectRoom";
+
+  const updateBooking = await Booking.update(req.body, { where: { id: id } });
+  res.status(200).json({ status: "success", data: updateBooking });
+});
+module.exports = { addBookingDates, updateBookingWithRoom };
