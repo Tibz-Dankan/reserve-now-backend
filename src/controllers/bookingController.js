@@ -27,7 +27,12 @@ const addBookingDates = asyncHandler(async (req, res, next) => {
   res.status(201).json({ status: "success", data: bookingDates });
 });
 
+// TODO: To be renamed to updateBooking
 const updateBookingWithRoom = asyncHandler(async (req, res, next) => {
+  // TODO: To include numOfGuests of booking
+  // TODO: To include totalPrice of booking
+  // TODO: To include priceCurrency of booking
+
   const id = req.params.id;
   const roomId = req.body.roomId;
   if (!id) return next(new AppError("please provide booking id", 400));
@@ -64,3 +69,8 @@ module.exports = {
   getBookingByUser,
   getAllBookings,
 };
+
+// ---- OVERALL TODOS ----
+// 1. send email successful signup
+// 2. implement contact controller and include email(To admin)
+// 3. implement payments using stripe and flutter wave
