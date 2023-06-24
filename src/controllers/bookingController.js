@@ -52,9 +52,15 @@ const getBookingByUser = asyncHandler(async (req, res, next) => {
   res.status(200).json({ status: "success", data: booking });
 });
 
+const getAllBookings = asyncHandler(async (req, res, next) => {
+  const bookings = await Booking.findAll();
+  res.status(200).json({ status: "success", data: bookings });
+});
+
 module.exports = {
   addBookingDates,
   updateBookingWithRoom,
   getBooking,
   getBookingByUser,
+  getAllBookings,
 };

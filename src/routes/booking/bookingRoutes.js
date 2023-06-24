@@ -4,8 +4,10 @@ const {
   updateBookingWithRoom,
   getBooking,
   getBookingByUser,
+  getAllBookings,
 } = require("../../controllers/bookingController");
 const { protect } = require("../../controllers/userController");
+const { getAllRooms } = require("../../controllers/roomController");
 
 const router = express.Router();
 
@@ -17,6 +19,7 @@ router.patch(
 );
 router.get("/api/booking/get-booking/:id", protect, getBooking);
 router.get("/api/booking/get-booking-by-user", protect, getBookingByUser);
+router.get("/api/booking/get-all-bookings", protect, getAllBookings);
 
 const bookingRoutes = router;
 
