@@ -4,6 +4,7 @@
     "hstore",
     "newpassword",
     "sendgrid",
-    "signin"
+    "signin",
+    "userid"
   ]
 }

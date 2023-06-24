@@ -3,6 +3,7 @@ const {
   addBookingDates,
   updateBookingWithRoom,
   getBooking,
+  getBookingByUser,
 } = require("../../controllers/bookingController");
 const { protect } = require("../../controllers/userController");
 
@@ -15,6 +16,7 @@ router.patch(
   updateBookingWithRoom
 );
 router.get("/api/booking/get-booking/:id", protect, getBooking);
+router.get("/api/booking/get-booking-by-user", protect, getBookingByUser);
 
 const bookingRoutes = router;
 
