@@ -7,7 +7,6 @@ const {
   getAllBookings,
 } = require("../../controllers/bookingController");
 const { protect } = require("../../controllers/userController");
-const { getAllRooms } = require("../../controllers/roomController");
 
 const router = express.Router();
 

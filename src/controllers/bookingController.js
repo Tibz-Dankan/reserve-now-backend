@@ -35,8 +35,12 @@ const updateBookingWithRoom = asyncHandler(async (req, res, next) => {
 
   const id = req.params.id;
   const roomId = req.body.roomId;
+  const numOfGuests = req.body.numOfGuests;
   if (!id) return next(new AppError("please provide booking id", 400));
   if (!roomId) return next(new AppError("please provide room id", 400));
+  if (!numOfGuests) {
+    return next(new AppError("Please provide number of guests", 400));
+  }
   req.body.bookingStage = "selectRoom";
 
   const updateBooking = await Booking.update(req.body, { where: { id: id } });
