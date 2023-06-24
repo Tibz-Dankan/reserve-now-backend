@@ -5,10 +5,10 @@ const { Email } = require("../utils/email");
 const { Op } = require("sequelize");
 
 const addBookingDates = asyncHandler(async (req, res, next) => {
-  console.log("req.body");
   console.log(req.body);
   //   TODO: to add timezone time date conversion to validate checkindate(checkin > now)
-  const { checkInDate, checkOutDate } = req.body;
+  const { checkInDate, checkOutDate, userId } = req.body;
+  if (!userId) return next(new AppError("Please provide a userId", 400));
   if (!checkInDate || !checkOutDate) {
     return next(
       new AppError("please provide check-in and check-out dates!", 400)

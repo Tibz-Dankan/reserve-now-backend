@@ -11,6 +11,7 @@ module.exports = {
       },
       userId: {
         type: Sequelize.INTEGER,
+        allowNull: false,
       },
       roomId: {
         type: Sequelize.INTEGER,
