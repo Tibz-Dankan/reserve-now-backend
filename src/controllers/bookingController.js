@@ -1,4 +1,5 @@
 const Booking = require("../models").Booking;
+const Room = require("../models").Room;
 const { AppError } = require("../utils/error");
 const { asyncHandler } = require("../utils/asyncHandler");
 const { Email } = require("../utils/email");
@@ -33,7 +34,7 @@ const updateBookingWithRoom = asyncHandler(async (req, res, next) => {
   // TODO: To include totalPrice of booking
   // TODO: To include priceCurrency of booking
 
-  const id = req.params.id;
+  const id = req.params.id; //bookingId
   const roomId = req.body.roomId;
   const numOfGuests = req.body.numOfGuests;
   if (!id) return next(new AppError("please provide booking id", 400));
@@ -41,6 +42,21 @@ const updateBookingWithRoom = asyncHandler(async (req, res, next) => {
   if (!numOfGuests) {
     return next(new AppError("Please provide number of guests", 400));
   }
+  const booking = await Booking.findOne({
+    where: { id: id },
+    include: [
+      {
+        model: Room,
+        as: "room",
+        // where: { id: roomId },
+        required: false,
+        right: true,
+      },
+    ],
+  });
+  console.log("booking");
+  console.log("booking");
+  console.log(booking.dataValues);
   req.body.bookingStage = "selectRoom";
 
   const updateBooking = await Booking.update(req.body, { where: { id: id } });
