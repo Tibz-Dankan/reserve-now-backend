@@ -1,5 +1,5 @@
 const path = require("path");
-const ejs = require("ejs");
+const pug = require("pug");
 const SGmail = require("@sendgrid/mail");
 
 class Email {
@@ -31,8 +31,8 @@ class Email {
   }
 
   async sendWelcome(username) {
-    const html = await ejs.renderFile(
-      path.join(__dirname, "../views/email/welcome.ejs"),
+    const html = pug.renderFile(
+      path.join(__dirname, "../views/email/welcome.pug"),
       {
         subject: this.subject,
         userName: username,
@@ -44,8 +44,8 @@ class Email {
   async sendPasswordReset(url, username) {
     console.log("Password reset url: ", url);
 
-    const html = await ejs.renderFile(
-      path.join(__dirname, "../views/email/reset-password.ejs"),
+    const html = pug.renderFile(
+      path.join(__dirname, "../views/email/resetPassword.pug"),
       {
         subject: "Password Reset",
         userName: username,
@@ -56,8 +56,8 @@ class Email {
   }
 
   async sendContactUs(name, message, email, subject) {
-    const html = await ejs.renderFile(
-      path.join(__dirname, "../views/email/contact.ejs"),
+    const html = pug.renderFile(
+      path.join(__dirname, "../views/email/contactUs.pug"),
       {
         subject: "Contact Us Message",
         name: name,
