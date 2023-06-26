@@ -1,5 +1,6 @@
 const Booking = require("../models").Booking;
 const Room = require("../models").Room;
+const User = require("../models").User;
 const { AppError } = require("../utils/error");
 const { asyncHandler } = require("../utils/asyncHandler");
 const { Email } = require("../utils/email");
@@ -51,7 +52,6 @@ const calTotalPrice = (checkInDate, checkOutDate, roomPrice) => {
   return numOfNights * roomPrice;
 };
 
-// TODO: To be renamed to updateBooking
 const updateBooking = asyncHandler(async (req, res, next) => {
   const id = req.params.id; //bookingId
   const roomId = req.body.roomId;
@@ -61,9 +61,18 @@ const updateBooking = asyncHandler(async (req, res, next) => {
   if (!numOfGuests) {
     return next(new AppError("Please provide number of guests", 400));
   }
-  const booking = await Booking.findOne({ where: { id: id } });
+  const booking = await Booking.findOne({
+    where: { id: id },
+    include: [
+      {
+        model: User,
+        as: "user",
+      },
+    ],
+  });
   const room = await Room.findOne({ where: { id: roomId } });
 
+  const roomNumber = room["dataValues"].roomNumber;
   const roomPrice = room["dataValues"].price;
   const checkInDate = booking["dataValues"].checkInDate;
   const checkOutDate = booking["dataValues"].checkOutDate;
@@ -72,6 +81,11 @@ const updateBooking = asyncHandler(async (req, res, next) => {
   req.body.priceCurrency = room["dataValues"].priceCurrency;
   req.body.totalPrice = calTotalPrice(checkInDate, checkOutDate, roomPrice);
 
+  const user = booking.user["dataValues"];
+  await new Email(user.email, "Booking Received").sendBookingNotification(
+    user.name,
+    roomNumber
+  );
   const updateBooking = await Booking.update(req.body, { where: { id: id } });
   res.status(200).json({ status: "success", data: updateBooking });
 });

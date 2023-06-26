@@ -66,7 +66,19 @@ class Email {
         contactSubject: subject,
       }
     );
-    await this.sendHtml(html, "Reset Password");
+    await this.sendHtml(html, "Contact Us Message");
+  }
+
+  async sendBookingNotification(username, roomNumber) {
+    const html = pug.renderFile(
+      path.join(__dirname, "../views/email/bookingNotification.pug"),
+      {
+        subject: "Booking Received",
+        userName: username,
+        roomNumber: roomNumber,
+      }
+    );
+    await this.sendHtml(html, "Booking Received");
   }
 }
 
