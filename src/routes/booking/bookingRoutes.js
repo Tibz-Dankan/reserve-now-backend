@@ -1,7 +1,7 @@
 const express = require("express");
 const {
   addBookingDates,
-  updateBookingWithRoom,
+  updateBooking,
   getBooking,
   getBookingByUser,
   getAllBookings,
@@ -14,7 +14,7 @@ router.post("/api/booking/add-booking-dates", protect, addBookingDates);
 router.patch(
   "/api/booking/update-booking-with-room/:id",
   protect,
-  updateBookingWithRoom
+  updateBooking
 );
 router.get("/api/booking/get-booking/:id", protect, getBooking);
 router.get("/api/booking/get-booking-by-user", protect, getBookingByUser);

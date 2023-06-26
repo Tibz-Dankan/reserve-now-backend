@@ -52,7 +52,7 @@ const calTotalPrice = (checkInDate, checkOutDate, roomPrice) => {
 };
 
 // TODO: To be renamed to updateBooking
-const updateBookingWithRoom = asyncHandler(async (req, res, next) => {
+const updateBooking = asyncHandler(async (req, res, next) => {
   const id = req.params.id; //bookingId
   const roomId = req.body.roomId;
   const numOfGuests = req.body.numOfGuests;
@@ -97,7 +97,7 @@ const getAllBookings = asyncHandler(async (req, res, next) => {
 
 module.exports = {
   addBookingDates,
-  updateBookingWithRoom,
+  updateBooking,
   getBooking,
   getBookingByUser,
   getAllBookings,
