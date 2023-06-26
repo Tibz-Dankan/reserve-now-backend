@@ -28,12 +28,31 @@ const addBookingDates = asyncHandler(async (req, res, next) => {
   res.status(201).json({ status: "success", data: bookingDates });
 });
 
+const calTotalPrice = (checkInDate, checkOutDate, roomPrice) => {
+  if (!checkInDate || !checkOutDate) {
+    console.log("Please provide booking dates");
+    throw new Error(
+      "Sorry, something went wrong on our side, try again later!"
+    );
+  }
+  if (!roomPrice) {
+    console.log("Please provide the room price");
+    throw new Error(
+      "Sorry, something went wrong on our side, try again later!"
+    );
+  }
+  const oneDayMillSec = 1000 * 60 * 60 * 24;
+  const checkInMillSec = new Date(checkInDate).getTime();
+  const checkOutMillSec = new Date(checkOutDate).getTime();
+
+  const numOfNights = Math.floor(
+    (checkOutMillSec - checkInMillSec) / oneDayMillSec
+  );
+  return numOfNights * roomPrice;
+};
+
 // TODO: To be renamed to updateBooking
 const updateBookingWithRoom = asyncHandler(async (req, res, next) => {
-  // TODO: To include numOfGuests of booking
-  // TODO: To include totalPrice of booking
-  // TODO: To include priceCurrency of booking
-
   const id = req.params.id; //bookingId
   const roomId = req.body.roomId;
   const numOfGuests = req.body.numOfGuests;
@@ -42,22 +61,16 @@ const updateBookingWithRoom = asyncHandler(async (req, res, next) => {
   if (!numOfGuests) {
     return next(new AppError("Please provide number of guests", 400));
   }
-  const booking = await Booking.findOne({
-    where: { id: id },
-    include: [
-      {
-        model: Room,
-        as: "room",
-        // where: { id: roomId },
-        required: false,
-        right: true,
-      },
-    ],
-  });
-  console.log("booking");
-  console.log("booking");
-  console.log(booking.dataValues);
+  const booking = await Booking.findOne({ where: { id: id } });
+  const room = await Room.findOne({ where: { id: roomId } });
+
+  const roomPrice = room["dataValues"].price;
+  const checkInDate = booking["dataValues"].checkInDate;
+  const checkOutDate = booking["dataValues"].checkOutDate;
+
   req.body.bookingStage = "selectRoom";
+  req.body.priceCurrency = room["dataValues"].priceCurrency;
+  req.body.totalPrice = calTotalPrice(checkInDate, checkOutDate, roomPrice);
 
   const updateBooking = await Booking.update(req.body, { where: { id: id } });
   res.status(200).json({ status: "success", data: updateBooking });
