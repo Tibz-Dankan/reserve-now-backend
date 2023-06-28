@@ -5,7 +5,7 @@ describe("test updateRoom API endpoint", () => {
   it("returns a 400 with missing roomNumber||roomType||capacity||price||priceCurrency ", async () => {
     // signup to get token
     const signupResponse = await request(app)
-      .post("/v1/api/users/signup")
+      .post("/api/v1/users/signup")
       .send({
         name: "test user",
         email: "test@test.com",
@@ -15,7 +15,7 @@ describe("test updateRoom API endpoint", () => {
       .expect(201);
     // create a room to get room id
     const addRoomResponse = await request(app)
-      .post("/v1/api/rooms/add-room")
+      .post("/api/v1/rooms/add-room")
       .send({
         roomNumber: "101",
         roomType: "Standard",
@@ -28,7 +28,7 @@ describe("test updateRoom API endpoint", () => {
     const roomId = addRoomResponse.body.data.id;
 
     await request(app)
-      .patch(`/v1/api/rooms/update-room/${roomId}`)
+      .patch(`/api/v1/rooms/update-room/${roomId}`)
       .send({
         roomNumber: "",
         roomType: "Standard",
@@ -40,7 +40,7 @@ describe("test updateRoom API endpoint", () => {
       .expect(400);
 
     await request(app)
-      .patch(`/v1/api/rooms/update-room/${roomId}`)
+      .patch(`/api/v1/rooms/update-room/${roomId}`)
       .send({
         roomNumber: "1",
         roomType: "",
@@ -52,7 +52,7 @@ describe("test updateRoom API endpoint", () => {
       .expect(400);
 
     await request(app)
-      .patch(`/v1/api/rooms/update-room/${roomId}`)
+      .patch(`/api/v1/rooms/update-room/${roomId}`)
       .send({
         roomNumber: "2",
         roomType: "Standard",
@@ -64,7 +64,7 @@ describe("test updateRoom API endpoint", () => {
       .expect(400);
 
     await request(app)
-      .patch(`/v1/api/rooms/update-room/${roomId}`)
+      .patch(`/api/v1/rooms/update-room/${roomId}`)
       .send({
         roomNumber: "2",
         roomType: "Standard",
@@ -76,7 +76,7 @@ describe("test updateRoom API endpoint", () => {
       .expect(400);
 
     await request(app)
-      .patch("/v1/api/rooms/update-room/:id")
+      .patch("/api/v1/rooms/update-room/:id")
       .query({ id: roomId })
       .send({
         roomNumber: "2",
@@ -91,7 +91,7 @@ describe("test updateRoom API endpoint", () => {
 
   it("returns 404 if no room is found", async () => {
     const signupResponse = await request(app)
-      .post("/v1/api/users/signup")
+      .post("/api/v1/users/signup")
       .send({
         name: "test user",
         email: "test@test.com",
@@ -101,7 +101,7 @@ describe("test updateRoom API endpoint", () => {
       .expect(201);
 
     await request(app)
-      .patch(`/v1/api/rooms/update-room/1000`)
+      .patch(`/api/v1/rooms/update-room/1000`)
       .send({
         roomNumber: "5",
         roomType: "Standard",
@@ -115,7 +115,7 @@ describe("test updateRoom API endpoint", () => {
 
   it("expects 200 on successful room update", async () => {
     const signupResponse = await request(app)
-      .post("/v1/api/users/signup")
+      .post("/api/v1/users/signup")
       .send({
         name: "test user",
         email: "test@test.com",
@@ -124,7 +124,7 @@ describe("test updateRoom API endpoint", () => {
       })
       .expect(201);
     const addRoomResponse = await request(app)
-      .post("/v1/api/rooms/add-room")
+      .post("/api/v1/rooms/add-room")
       .send({
         roomNumber: "101",
         roomType: "Standard",
@@ -137,7 +137,7 @@ describe("test updateRoom API endpoint", () => {
     const roomId = addRoomResponse.body.data.id;
 
     await request(app)
-      .patch(`/v1/api/rooms/update-room/${roomId}`)
+      .patch(`/api/v1/rooms/update-room/${roomId}`)
       .send({
         roomNumber: "103",
         roomType: "Deluxe",

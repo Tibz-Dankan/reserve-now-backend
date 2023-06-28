@@ -5,7 +5,7 @@ describe("test addRoom API endpoint", () => {
   it("returns a 201 on successful room creation", async () => {
     // signup to get token
     const res = await request(app)
-      .post("/v1/api/users/signup")
+      .post("/api/v1/users/signup")
       .send({
         name: "test user",
         email: "test@test.com",
@@ -15,7 +15,7 @@ describe("test addRoom API endpoint", () => {
       .expect(201);
 
     await request(app)
-      .post("/v1/api/rooms/add-room")
+      .post("/api/v1/rooms/add-room")
       .send({
         roomNumber: "101",
         roomType: "Standard",
@@ -30,7 +30,7 @@ describe("test addRoom API endpoint", () => {
   it("returns a 400 with missing roomNumber||roomType||capacity||price||priceCurrency ", async () => {
     // signup to get token
     const res = await request(app)
-      .post("/v1/api/users/signup")
+      .post("/api/v1/users/signup")
       .send({
         name: "test user",
         email: "test@test.com",
@@ -40,7 +40,7 @@ describe("test addRoom API endpoint", () => {
       .expect(201);
 
     await request(app)
-      .post("/v1/api/rooms/add-room")
+      .post("/api/v1/rooms/add-room")
       .send({
         roomNumber: "",
         roomType: "Standard",
@@ -52,7 +52,7 @@ describe("test addRoom API endpoint", () => {
       .expect(400);
 
     await request(app)
-      .post("/v1/api/rooms/add-room")
+      .post("/api/v1/rooms/add-room")
       .send({
         roomNumber: "1",
         roomType: "",
@@ -64,7 +64,7 @@ describe("test addRoom API endpoint", () => {
       .expect(400);
 
     await request(app)
-      .post("/v1/api/rooms/add-room")
+      .post("/api/v1/rooms/add-room")
       .send({
         roomNumber: "2",
         roomType: "Standard",
@@ -76,7 +76,7 @@ describe("test addRoom API endpoint", () => {
       .expect(400);
 
     await request(app)
-      .post("/v1/api/rooms/add-room")
+      .post("/api/v1/rooms/add-room")
       .send({
         roomNumber: "2",
         roomType: "Standard",
@@ -88,7 +88,7 @@ describe("test addRoom API endpoint", () => {
       .expect(400);
 
     await request(app)
-      .post("/v1/api/rooms/add-room")
+      .post("/api/v1/rooms/add-room")
       .send({
         roomNumber: "2",
         roomType: "Standard",
@@ -102,7 +102,7 @@ describe("test addRoom API endpoint", () => {
 
   it("disallows duplicate room numbers", async () => {
     const res = await request(app)
-      .post("/v1/api/users/signup")
+      .post("/api/v1/users/signup")
       .send({
         name: "test user",
         email: "test@test.com",
@@ -112,7 +112,7 @@ describe("test addRoom API endpoint", () => {
       .expect(201);
 
     await request(app)
-      .post("/v1/api/rooms/add-room")
+      .post("/api/v1/rooms/add-room")
       .send({
         roomNumber: "101",
         roomType: "Standard",
@@ -123,7 +123,7 @@ describe("test addRoom API endpoint", () => {
       .set("Authorization", `Bearer ${res.body.token}`)
       .expect(201);
     await request(app)
-      .post("/v1/api/rooms/add-room")
+      .post("/api/v1/rooms/add-room")
       .send({
         roomNumber: "101",
         roomType: "Standard",

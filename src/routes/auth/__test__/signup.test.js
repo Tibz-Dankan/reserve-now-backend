@@ -4,7 +4,7 @@ const { app } = require("../../../app");
 describe("test signup api end point", () => {
   it("returns a 201 on successful signup", async () => {
     return request(app)
-      .post("/v1/api/users/signup")
+      .post("/api/v1/users/signup")
       .send({
         name: "test user",
         email: "test@test.com",
@@ -16,7 +16,7 @@ describe("test signup api end point", () => {
 
   it("returns a 400 with an invalid email", async () => {
     return request(app)
-      .post("/v1/api/users/signup")
+      .post("/api/v1/users/signup")
       .send({
         name: "test user",
         email: "test.com",
@@ -28,7 +28,7 @@ describe("test signup api end point", () => {
 
   it("returns a 400 with missing name or email or password", async () => {
     await request(app)
-      .post("/v1/api/users/signup")
+      .post("/api/v1/users/signup")
       .send({
         name: "",
         email: "test@test.com",
@@ -37,7 +37,7 @@ describe("test signup api end point", () => {
       })
       .expect(400);
     await request(app)
-      .post("/v1/api/users/signup")
+      .post("/api/v1/users/signup")
       .send({
         name: "test user",
         email: "",
@@ -46,7 +46,7 @@ describe("test signup api end point", () => {
       })
       .expect(400);
     await request(app)
-      .post("/v1/api/users/signup")
+      .post("/api/v1/users/signup")
       .send({
         name: "test user",
         email: "test@test.com",
@@ -58,7 +58,7 @@ describe("test signup api end point", () => {
 
   it("disallows duplicate emails", async () => {
     await request(app)
-      .post("/v1/api/users/signup")
+      .post("/api/v1/users/signup")
       .send({
         name: "test user",
         email: "test@test.com",
@@ -67,7 +67,7 @@ describe("test signup api end point", () => {
       })
       .expect(201);
     await request(app)
-      .post("/v1/api/users/signup")
+      .post("/api/v1/users/signup")
       .send({
         name: "test user",
         email: "test@test.com",
@@ -79,7 +79,7 @@ describe("test signup api end point", () => {
 
   it("expects a token after signup", async () => {
     const res = await request(app)
-      .post("/v1/api/users/signup")
+      .post("/api/v1/users/signup")
       .send({
         name: "test user",
         email: "test@test.com",

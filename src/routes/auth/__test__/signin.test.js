@@ -4,7 +4,7 @@ const { app } = require("../../../app");
 describe("test the signin api end point", () => {
   it("returns a 200 on successful signin", async () => {
     await request(app)
-      .post("/v1/api/users/signup")
+      .post("/api/v1/users/signup")
       .send({
         name: "test user",
         email: "test@test.com",
@@ -13,7 +13,7 @@ describe("test the signin api end point", () => {
       })
       .expect(201);
     await request(app)
-      .post("/v1/api/users/signin")
+      .post("/api/v1/users/signin")
       .send({
         email: "test@test.com",
         password: "password",
@@ -23,14 +23,14 @@ describe("test the signin api end point", () => {
 
   it("returns 400 with missing email or password ", async () => {
     await request(app)
-      .post("/v1/api/users/signin")
+      .post("/api/v1/users/signin")
       .send({
         email: "",
         password: "password",
       })
       .expect(400);
     await request(app)
-      .post("/v1/api/users/signin")
+      .post("/api/v1/users/signin")
       .send({
         email: "test@test.com",
         password: "",
@@ -40,7 +40,7 @@ describe("test the signin api end point", () => {
 
   it("returns 400 when email is invalid", async () => {
     await request(app)
-      .post("/v1/api/users/signup")
+      .post("/api/v1/users/signup")
       .send({
         name: "test user",
         email: "test@test.com",
@@ -49,7 +49,7 @@ describe("test the signin api end point", () => {
       })
       .expect(201);
     await request(app)
-      .post("/v1/api/users/signin")
+      .post("/api/v1/users/signin")
       .send({
         email: "t@test.com",
         password: "password",
@@ -59,7 +59,7 @@ describe("test the signin api end point", () => {
 
   it("returns 400 when password is invalid", async () => {
     await request(app)
-      .post("/v1/api/users/signup")
+      .post("/api/v1/users/signup")
       .send({
         name: "test user",
         email: "test@test.com",
@@ -68,7 +68,7 @@ describe("test the signin api end point", () => {
       })
       .expect(201);
     await request(app)
-      .post("/v1/api/users/signin")
+      .post("/api/v1/users/signin")
       .send({
         email: "test@test.com",
         password: "bsjsa",
@@ -78,7 +78,7 @@ describe("test the signin api end point", () => {
 
   it("expects a token after signin", async () => {
     await request(app)
-      .post("/v1/api/users/signup")
+      .post("/api/v1/users/signup")
       .send({
         name: "test user",
         email: "test@test.com",
@@ -87,7 +87,7 @@ describe("test the signin api end point", () => {
       })
       .expect(201);
     const res = await request(app)
-      .post("/v1/api/users/signin")
+      .post("/api/v1/users/signin")
       .send({
         email: "test@test.com",
         password: "password",

@@ -7,7 +7,7 @@ describe("test getBooking api end point", () => {
   it("returns a 400 with missing userId", async () => {
     // signup user to get token and userId
     const signupResponse = await request(app)
-      .post("/v1/api/users/signup")
+      .post("/api/v1/users/signup")
       .send({
         name: "test user",
         email: "test@test.com",
@@ -18,7 +18,7 @@ describe("test getBooking api end point", () => {
     const userId = signupResponse.body.user.id;
 
     await request(app)
-      .post("/v1/api/booking/add-booking-dates")
+      .post("/api/v1/booking/add-booking-dates")
       .send({
         checkInDate: new Date().toISOString(),
         checkOutDate: new Date(
@@ -30,7 +30,7 @@ describe("test getBooking api end point", () => {
       .expect(201);
 
     await request(app)
-      .get(`/v1/api/booking/get-booking-by-user`)
+      .get(`/api/v1/booking/get-booking-by-user`)
       .send({
         userId: "",
       })
@@ -41,7 +41,7 @@ describe("test getBooking api end point", () => {
   it("returns a 200 on successful getting of booking associated with a user", async () => {
     // signup user to get token and userId
     const signupResponse = await request(app)
-      .post("/v1/api/users/signup")
+      .post("/api/v1/users/signup")
       .send({
         name: "test user",
         email: "test@test.com",
@@ -52,7 +52,7 @@ describe("test getBooking api end point", () => {
     const userId = signupResponse.body.user.id;
     // add booking to get bookingId
     const addBKDatesResponse = await request(app)
-      .post("/v1/api/booking/add-booking-dates")
+      .post("/api/v1/booking/add-booking-dates")
       .send({
         checkInDate: new Date().toISOString(),
         checkOutDate: new Date(
@@ -64,7 +64,7 @@ describe("test getBooking api end point", () => {
       .expect(201);
 
     await request(app)
-      .get(`/v1/api/booking/get-booking-by-user`)
+      .get(`/api/v1/booking/get-booking-by-user`)
       .send({
         userId: userId,
       })

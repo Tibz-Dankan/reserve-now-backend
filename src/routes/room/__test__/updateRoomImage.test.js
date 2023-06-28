@@ -6,7 +6,7 @@ const { resolve } = require("path");
 describe("test updateRoomImage API endpoint", () => {
   it("returns 400 with non image files", async () => {
     const signupResponse = await request(app)
-      .post("/v1/api/users/signup")
+      .post("/api/v1/users/signup")
       .send({
         name: "test user",
         email: "test@test.com",
@@ -16,7 +16,7 @@ describe("test updateRoomImage API endpoint", () => {
       .expect(201);
 
     const addRoomResponse = await request(app)
-      .post("/v1/api/rooms/add-room")
+      .post("/api/v1/rooms/add-room")
       .send({
         roomNumber: "101",
         roomType: "Standard",
@@ -30,7 +30,7 @@ describe("test updateRoomImage API endpoint", () => {
 
     const filePath = resolve("./src/test/non-image/test-ppt.pptx");
     await request(app)
-      .patch(`/v1/api/rooms/update-room-image/${roomId}`)
+      .patch(`/api/v1/rooms/update-room-image/${roomId}`)
       .attach("file", filePath)
       .set("Authorization", `Bearer ${signupResponse.body.token}`)
       .expect(400);
@@ -38,7 +38,7 @@ describe("test updateRoomImage API endpoint", () => {
 
   it("returns 200 on successful update of room image", async () => {
     const signupResponse = await request(app)
-      .post("/v1/api/users/signup")
+      .post("/api/v1/users/signup")
       .send({
         name: "test user",
         email: "test@test.com",
@@ -48,7 +48,7 @@ describe("test updateRoomImage API endpoint", () => {
       .expect(201);
 
     const addRoomResponse = await request(app)
-      .post("/v1/api/rooms/add-room")
+      .post("/api/v1/rooms/add-room")
       .send({
         roomNumber: "101",
         roomType: "Standard",
@@ -62,7 +62,7 @@ describe("test updateRoomImage API endpoint", () => {
     const imagePath = resolve("./src/test/image/test-image.png");
 
     await request(app)
-      .patch(`/v1/api/rooms/update-room-image/${roomId}`)
+      .patch(`/api/v1/rooms/update-room-image/${roomId}`)
       .attach("file", imagePath)
       .set("Authorization", `Bearer ${signupResponse.body.token}`)
       .expect(200);
