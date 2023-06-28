@@ -1,7 +1,7 @@
 const request = require("supertest");
 const { app } = require("../../../app");
 
-// npm test -- updateBookingWithRoom.test.js  //To run this test suite
+// npm test -- updateBooking.test.js  //To run this test suite
 
 describe("test updateBookingWithRoom api end point", () => {
   it("returns a 400 with missing roomId or number of guests", async () => {
@@ -44,7 +44,7 @@ describe("test updateBookingWithRoom api end point", () => {
     const roomId = addRoomResponse.body.data.id;
 
     await request(app)
-      .patch(`/api/v1/booking/update-booking-with-room/${bookingId}`)
+      .patch(`/api/v1/booking/update-booking/${bookingId}`)
       .send({
         roomId: "",
         numOfGuests: "2",
@@ -52,7 +52,7 @@ describe("test updateBookingWithRoom api end point", () => {
       .set("Authorization", `Bearer ${signupResponse.body.token}`)
       .expect(400);
     await request(app)
-      .patch(`/api/v1/booking/update-booking-with-room/${bookingId}`)
+      .patch(`/api/v1/booking/update-booking/${bookingId}`)
       .send({
         roomId: roomId,
         numOfGuests: "",
@@ -101,7 +101,7 @@ describe("test updateBookingWithRoom api end point", () => {
     const bookingId = addBKDatesResponse.body.data.id;
 
     await request(app)
-      .patch(`/api/v1/booking/update-booking-with-room/${bookingId}`)
+      .patch(`/api/v1/booking/update-booking/${bookingId}`)
       .send({
         roomId: roomId,
         numOfGuests: "2",
