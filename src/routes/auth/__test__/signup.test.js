@@ -1,6 +1,8 @@
 const request = require("supertest");
 const { app } = require("../../../app");
 
+// npm test -- signup.test.js  //To run this test suite
+
 describe("test signup api end point", () => {
   it("returns a 201 on successful signup", async () => {
     return request(app)
@@ -26,7 +28,7 @@ describe("test signup api end point", () => {
       .expect(400);
   });
 
-  it("returns a 400 with missing name or email or password", async () => {
+  it("returns a 400 with missing name or email or password or country", async () => {
     await request(app)
       .post("/api/v1/users/signup")
       .send({
@@ -52,6 +54,15 @@ describe("test signup api end point", () => {
         email: "test@test.com",
         password: "",
         country: "country",
+      })
+      .expect(400);
+    await request(app)
+      .post("/api/v1/users/signup")
+      .send({
+        name: "test user",
+        email: "test@test.com",
+        password: "password",
+        country: "",
       })
       .expect(400);
   });

@@ -15,7 +15,7 @@ const signup = asyncHandler(async (req, res, next) => {
 
   console.log(req.body);
 
-  if (!name || !email || !password) {
+  if (!country || !name || !email || !password) {
     return next(new AppError("Please fill out all fields", 400));
   }
   if (!email.includes("@")) {
