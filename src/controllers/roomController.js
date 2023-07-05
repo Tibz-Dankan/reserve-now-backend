@@ -20,7 +20,11 @@ const addRoom = asyncHandler(async (req, res, next) => {
 
   const newRoom = await Room.create(req.body);
 
-  res.status(201).json({ success: true, data: newRoom });
+  res.status(201).json({
+    status: "success",
+    message: "Room added successfully",
+    data: newRoom,
+  });
 });
 
 const getAllRooms = asyncHandler(async (req, res, next) => {
@@ -63,7 +67,11 @@ const updateRoom = asyncHandler(async (req, res, next) => {
   }
   room = await Room.update(req.body, { where: { id: id } });
 
-  res.status(200).json({ status: "success", data: room });
+  res.status(200).json({
+    status: "success",
+    message: "Room updated successfully",
+    data: room,
+  });
 });
 
 const updateRoomImage = asyncHandler(async (req, res, next) => {
@@ -78,7 +86,9 @@ const updateRoomImage = asyncHandler(async (req, res, next) => {
 
   const mimeType = mime.lookup(file.originalname);
   const isImage = mimeType && mimeType.startsWith("image");
-  if (!isImage) return next(new AppError("Please file of image type", 400));
+  if (!isImage) {
+    return next(new AppError("Please provide file of image type", 400));
+  }
 
   const imagePath = `rooms/${Date.now()}_${file.originalname}`;
   const upload = await new Upload(imagePath, next).add(file);
@@ -89,7 +99,11 @@ const updateRoomImage = asyncHandler(async (req, res, next) => {
     { where: { id: id } }
   );
 
-  res.status(200).json({ status: "success", data: updateImage });
+  res.status(200).json({
+    status: "success",
+    message: "Image uploaded successfully",
+    data: updateImage,
+  });
 });
 
 module.exports = { addRoom, getAllRooms, getRoom, updateRoom, updateRoomImage };
