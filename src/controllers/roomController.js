@@ -14,7 +14,9 @@ const addRoom = asyncHandler(async (req, res, next) => {
   }
   const room = await Room.findOne({ where: { roomNumber: roomNumber } });
 
-  if (room) return next(new AppError("Room already exits", 400));
+  if (room) {
+    return next(new AppError(`Room number ${roomNumber} already exits`, 400));
+  }
 
   const newRoom = await Room.create(req.body);
 
