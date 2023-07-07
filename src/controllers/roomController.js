@@ -106,4 +106,23 @@ const updateRoomImage = asyncHandler(async (req, res, next) => {
   });
 });
 
-module.exports = { addRoom, getAllRooms, getRoom, updateRoom, updateRoomImage };
+const searchRooms = asyncHandler(async (req, res, next) => {
+  console.log("req.body");
+  console.log(req.body);
+  console.log("req.params");
+  console.log(req.params);
+  console.log("req.query");
+  console.log(req.query);
+  // const rooms = await Room.findAll();
+
+  res.status(200).json({ status: "success", data: [] });
+});
+
+module.exports = {
+  addRoom,
+  getAllRooms,
+  getRoom,
+  updateRoom,
+  updateRoomImage,
+  searchRooms,
+};
