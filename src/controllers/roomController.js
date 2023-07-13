@@ -114,6 +114,8 @@ const searchRooms = asyncHandler(async (req, res, next) => {
   console.log("req.query");
   console.log(req.query);
   // const rooms = await Room.findAll();
+  // Create A View with all rooms having bookings (>Now )
+  // Create Another View of room without any booking (<Now || !booking)
 
   res.status(200).json({ status: "success", data: [] });
 });
