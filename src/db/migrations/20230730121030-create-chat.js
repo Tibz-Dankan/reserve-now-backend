@@ -33,10 +33,6 @@ module.exports = {
       otherFileUrl: {
         type: Sequelize.TEXT,
       },
-      createdAt: {
-        type: Sequelize.DATE,
-        defaultValue: Sequelize.NOW,
-      },
       isRead: {
         type: Sequelize.BOOLEAN,
         defaultValue: false,
@@ -44,6 +40,10 @@ module.exports = {
       isDelivered: {
         type: Sequelize.BOOLEAN,
         defaultValue: false,
+      },
+      createdAt: {
+        type: Sequelize.DATE,
+        allowNull: false,
       },
       updatedAt: {
         type: Sequelize.DATE,

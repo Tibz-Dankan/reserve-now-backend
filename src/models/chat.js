@@ -45,10 +45,6 @@ module.exports = (sequelize, DataTypes) => {
       otherFileUrl: {
         type: DataTypes.TEXT,
       },
-      createdAt: {
-        type: DataTypes.DATE,
-        defaultValue: Sequelize.NOW,
-      },
       isRead: {
         type: DataTypes.BOOLEAN,
         defaultValue: false,
@@ -56,6 +52,10 @@ module.exports = (sequelize, DataTypes) => {
       isDelivered: {
         type: DataTypes.BOOLEAN,
         defaultValue: false,
+      },
+      createdAt: {
+        type: DataTypes.DATE,
+        allowNull: false,
       },
       updatedAt: {
         type: DataTypes.DATE,

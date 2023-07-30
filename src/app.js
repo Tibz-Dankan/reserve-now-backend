@@ -5,6 +5,7 @@ const { roomRoutes } = require("./routes/room/roomRoutes");
 const { bookingRoutes } = require("./routes/booking/bookingRoutes");
 const { chatRoutes } = require("./routes/chat/chatRoutes");
 const { errorController } = require("./controllers/errorController");
+const { chatHandler } = require("./controllers/chatController");
 const logger = require("morgan");
 
 const app = express();
@@ -36,7 +37,8 @@ app.use("/api/v1/users", userRoutes);
 app.use("/api/v1/rooms", roomRoutes);
 app.use("/api/v1/booking", bookingRoutes);
 app.use("/api/v1/chat", chatRoutes);
-// chatHandler here
+
+chatHandler(io);
 
 app.use(errorController);
 
