@@ -16,6 +16,11 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: "userId",
         as: "bookings",
       });
+
+      User.hasMany(models.Chat, {
+        foreignKey: "senderId",
+        as: "chat",
+      });
     }
 
     async correctPassword(password) {

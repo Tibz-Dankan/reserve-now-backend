@@ -3,6 +3,7 @@ const cors = require("cors");
 const { userRoutes } = require("./routes/auth/userRoutes");
 const { roomRoutes } = require("./routes/room/roomRoutes");
 const { bookingRoutes } = require("./routes/booking/bookingRoutes");
+const { chatRoutes } = require("./routes/chat/chatRoutes");
 const { errorController } = require("./controllers/errorController");
 const logger = require("morgan");
 
@@ -34,6 +35,7 @@ app.use(logger("dev"));
 app.use("/api/v1/users", userRoutes);
 app.use("/api/v1/rooms", roomRoutes);
 app.use("/api/v1/booking", bookingRoutes);
+app.use("/api/v1/chat", chatRoutes);
 // chatHandler here
 
 app.use(errorController);
