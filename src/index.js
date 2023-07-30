@@ -1,6 +1,6 @@
 const { Sequelize } = require("sequelize");
 const dotenv = require("dotenv");
-const { app } = require("./app");
+const { server } = require("./app");
 
 dotenv.config();
 
@@ -22,7 +22,7 @@ const startApp = async () => {
     console.error("Unable to connect to the database:", error);
   }
 
-  app.listen(PORT, () => {
+  server.listen(PORT, () => {
     console.log("Server started and running on port: " + PORT + " 🚀");
   });
 };
