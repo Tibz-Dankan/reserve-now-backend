@@ -39,11 +39,11 @@ const joinChatRoom = (socket) => {
 };
 
 const receiveSendMessage = (socket) => {
-  socket.on("sendMessage", (msgObj) => {
+  socket.on("sendMessage", async (msgObj) => {
     console.log("Message sent: ");
     console.log(msgObj);
     socket.to(msgObj.chatRoomId).emit("receiveMessage", msgObj);
-    saveChatMessage(msgObj);
+    await saveChatMessage(msgObj);
   });
 };
 
