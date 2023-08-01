@@ -3,7 +3,7 @@ name: Deploy To Render
 on:
   push:
     branches:
-      - master
+      - main
 jobs:
   build:
     runs-on: ubuntu-latest
