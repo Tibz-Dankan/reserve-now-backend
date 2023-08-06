@@ -7,6 +7,7 @@ const { chatRoutes } = require("./routes/chat/chatRoutes");
 const { errorController } = require("./controllers/errorController");
 const { chatHandler } = require("./controllers/chatController");
 const logger = require("morgan");
+const { keepActiveController } = require("keep-apps-active");
 
 const app = express();
 let url;
@@ -39,6 +40,8 @@ app.use("/api/v1/booking", bookingRoutes);
 app.use("/api/v1/chat", chatRoutes);
 
 chatHandler(io);
+
+keepActiveController(app);
 
 app.use(errorController);
 
