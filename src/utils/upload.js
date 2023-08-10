@@ -14,6 +14,7 @@ const multerConfig = multer({
   },
 });
 const uploadFile = multerConfig.single("file");
+const uploadFiles = multerConfig.array("files");
 
 class Upload {
   firebaseStorage;
@@ -107,4 +108,4 @@ class Upload {
   }
 }
 
-module.exports = { Upload, uploadFile };
+module.exports = { Upload, uploadFile, uploadFiles };

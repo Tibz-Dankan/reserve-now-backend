@@ -135,7 +135,7 @@ const updateRoomImage = asyncHandler(async (req, res, next) => {
   const url = upload.url;
 
   const updateImage = await Room.update(
-    { imageUrl: url, imagePath: imagePath },
+    { images: { url: url, path: imagePath } },
     { where: { id: id } }
   );
 
