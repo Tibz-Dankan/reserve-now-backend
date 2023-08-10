@@ -9,23 +9,19 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
-      roomNumber: {
-        allowNull: false,
-        type: Sequelize.INTEGER,
+      roomName: {
+        type: Sequelize.STRING,
       },
       roomType: {
         allowNull: false,
         type: Sequelize.STRING,
       },
       capacity: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.JSONB,
         allowNull: false,
       },
-      imageUrl: {
-        type: Sequelize.STRING,
-      },
-      imagePath: {
-        type: Sequelize.STRING,
+      images: {
+        type: Sequelize.JSONB,
       },
       isAvailable: {
         type: Sequelize.BOOLEAN,
@@ -40,17 +36,13 @@ module.exports = {
         defaultValue: "vacant",
       },
       amenities: {
-        type: Sequelize.STRING,
+        type: Sequelize.JSONB,
       },
       view: {
         type: Sequelize.STRING,
       },
       price: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-      },
-      priceCurrency: {
-        type: Sequelize.STRING,
+        type: Sequelize.JSONB,
         allowNull: false,
       },
       policy: {
@@ -59,14 +51,15 @@ module.exports = {
       additionalNotes: {
         type: Sequelize.TEXT,
       },
-      createdAt: {
-        allowNull: false,
-        type: Sequelize.DATE,
+      publish: {
+        type: Sequelize.JSONB,
+        defaultValue: {
+          isPublish: false,
+          publishedAt: "",
+        },
       },
-      updatedAt: {
-        allowNull: false,
-        type: Sequelize.DATE,
-      },
+      createdAt: Sequelize.DATE,
+      updatedAt: Sequelize.DATE,
     });
   },
   async down(queryInterface, Sequelize) {

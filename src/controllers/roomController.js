@@ -6,16 +6,37 @@ const mime = require("mime-types");
 const { Upload } = require("../utils/upload");
 const path = require("path");
 
-const addRoom = asyncHandler(async (req, res, next) => {
-  const { roomNumber, roomType, capacity, price, priceCurrency } = req.body;
+const addRoomBasicInfo = asyncHandler(async (req, res, next) => {
+  const { roomType, roomName, capacity, price } = req.body;
 
-  if (!roomNumber || !roomType || !capacity || !price || !priceCurrency) {
+  if (!roomName || !roomType || !capacity || !price) {
     return next(new AppError("Please fill out all mandatory fields", 400));
   }
-  const room = await Room.findOne({ where: { roomNumber: roomNumber } });
+  const hasPriceProperties = ["amount", "currency"].every((property) =>
+    price.hasOwnProperty(property)
+  );
+  if (!hasPriceProperties || !price.amount || !price.currency) {
+    return next(
+      new AppError("Please provide the price amount and currency", 400)
+    );
+  }
+  const hasCapacityProperties = ["adults", "children"].every((property) =>
+    capacity.hasOwnProperty(property)
+  );
+  if (!hasCapacityProperties || !capacity.adults) {
+    return next(
+      new AppError(
+        "Please provide room capacity and at least indicate the number of adults",
+        400
+      )
+    );
+  }
+  const room = await Room.findOne({ where: { roomName: roomName } });
 
   if (room) {
-    return next(new AppError(`Room number ${roomNumber} already exits`, 400));
+    return next(
+      new AppError(`Room with name ${roomName} is already added`, 400)
+    );
   }
 
   const newRoom = await Room.create(req.body);
@@ -43,13 +64,32 @@ const getRoom = asyncHandler(async (req, res, next) => {
   res.status(200).json({ status: "success", data: room });
 });
 
-const updateRoom = asyncHandler(async (req, res, next) => {
-  const { roomNumber, roomType, capacity, price, priceCurrency } = req.body;
+const updateRoomBasicInfo = asyncHandler(async (req, res, next) => {
+  const { roomName, roomType, capacity, price } = req.body;
   const id = req.params.id;
   if (!id) return next(new AppError("No room id is supplied", 400));
 
-  if (!roomNumber || !roomType || !capacity || !price || !priceCurrency) {
+  if (!roomName || !roomType || !capacity || !price) {
     return next(new AppError("Please fill out all mandatory fields", 400));
+  }
+  const hasPriceProperties = ["amount", "currency"].every((property) =>
+    price.hasOwnProperty(property)
+  );
+  if (!hasPriceProperties || !price.amount || !price.currency) {
+    return next(
+      new AppError("Please provide the price amount and currency", 400)
+    );
+  }
+  const hasCapacityProperties = ["adults", "children"].every((property) =>
+    capacity.hasOwnProperty(property)
+  );
+  if (!hasCapacityProperties || !capacity.adults) {
+    return next(
+      new AppError(
+        "Please provide room capacity and at least indicate the number of adults",
+        400
+      )
+    );
   }
   let room = await Room.findOne({ where: { id: id } });
 
@@ -57,11 +97,11 @@ const updateRoom = asyncHandler(async (req, res, next) => {
     return next(new AppError("Room of supplied id doesn't exist", 404));
   }
 
-  if (room.dataValues.roomNumber !== parseInt(roomNumber)) {
-    room = await Room.findOne({ where: { roomNumber: roomNumber } });
+  if (room.dataValues.roomName === roomName) {
+    room = await Room.findOne({ where: { roomName: roomName } });
     if (room) {
       return next(
-        new AppError("Can't Update to already existing room number", 400)
+        new AppError("Can't Update to already existing room name", 400)
       );
     }
   }
@@ -121,10 +161,10 @@ const searchRooms = asyncHandler(async (req, res, next) => {
 });
 
 module.exports = {
-  addRoom,
+  addRoomBasicInfo,
   getAllRooms,
   getRoom,
-  updateRoom,
+  updateRoomBasicInfo,
   updateRoomImage,
   searchRooms,
 };

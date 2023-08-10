@@ -27,23 +27,19 @@ module.exports = (sequelize, DataTypes) => {
         primaryKey: true,
         autoIncrement: true,
       },
-      roomNumber: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
+      roomName: {
+        type: DataTypes.STRING,
       },
       roomType: {
         type: DataTypes.STRING, //single, double, suite, deluxe, etc
         allowNull: false,
       },
       capacity: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.JSONB, // format { adults: 2, children: 1 }
         allowNull: false,
       },
-      imageUrl: {
-        type: DataTypes.STRING,
-      },
-      imagePath: {
-        type: DataTypes.STRING,
+      images: {
+        type: DataTypes.JSONB, // format [{ viewType: "", url: "", path: "" }]
       },
       isAvailable: {
         type: DataTypes.BOOLEAN,
@@ -58,17 +54,13 @@ module.exports = (sequelize, DataTypes) => {
         defaultValue: "vacant",
       },
       amenities: {
-        type: DataTypes.STRING,
+        type: DataTypes.JSONB,
       },
       view: {
         type: DataTypes.STRING,
       },
       price: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-      },
-      priceCurrency: {
-        type: DataTypes.STRING,
+        type: DataTypes.JSONB, //format {amount:50, currency:"US dollar" }
         allowNull: false,
       },
       policy: {
@@ -77,14 +69,15 @@ module.exports = (sequelize, DataTypes) => {
       additionalNotes: {
         type: DataTypes.TEXT,
       },
-      createdAt: {
-        type: DataTypes.DATE,
-        defaultValue: Sequelize.NOW,
+      publish: {
+        type: DataTypes.JSONB,
+        defaultValue: {
+          isPublish: false,
+          publishedAt: "",
+        },
       },
-      updatedAt: {
-        type: DataTypes.DATE,
-        defaultValue: Sequelize.NOW,
-      },
+      createdAt: DataTypes.DATE,
+      updatedAt: DataTypes.DATE,
     },
     {
       sequelize,
