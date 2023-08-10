@@ -9,22 +9,16 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
-      roomType: {
-        type: Sequelize.STRING,
-        allowNull: false,
-      },
       roomId: {
         type: Sequelize.INTEGER,
         allowNull: false,
       },
-      createdAt: {
+      bedType: {
+        type: Sequelize.STRING,
         allowNull: false,
-        type: Sequelize.DATE,
       },
-      updatedAt: {
-        allowNull: false,
-        type: Sequelize.DATE,
-      },
+      createdAt: Sequelize.DATE,
+      updatedAt: Sequelize.DATE,
     });
   },
   async down(queryInterface, Sequelize) {
