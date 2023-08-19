@@ -44,7 +44,9 @@ const addRoomBasicInfo = asyncHandler(async (req, res, next) => {
   res.status(201).json({
     status: "success",
     message: "Room added successfully",
-    data: newRoom,
+    data: {
+      room: newRoom,
+    },
   });
 });
 

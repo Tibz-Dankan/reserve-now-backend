@@ -3,10 +3,10 @@ const { AppError } = require("../utils/error");
 const { asyncHandler } = require("../utils/asyncHandler");
 
 const addBeds = asyncHandler(async (req, res, next) => {
-  console.log("req.body");
-  console.log(req.body);
   const roomId = req.body.roomId;
   const bedTypes = req.body.bedTypes;
+
+  // TODO: add validation to avoid adding more beds to the room beyond its capacity
 
   if (!roomId) return next(new AppError("Please a roomId", 400));
   if (!bedTypes[0]) {
@@ -24,8 +24,6 @@ const addBeds = asyncHandler(async (req, res, next) => {
       roomId: roomId,
       bedType: bedType,
     });
-    console.log("newBed");
-    console.log(newBed);
   });
 
   res.status(201).json({
