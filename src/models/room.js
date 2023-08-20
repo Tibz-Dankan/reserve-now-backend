@@ -40,6 +40,11 @@ module.exports = (sequelize, DataTypes) => {
       },
       images: {
         type: DataTypes.JSONB, // format [{ viewType: "", url: "", path: "" }]
+        defaultValue: [
+          { viewType: "interior", url: "", path: "", createdAt: "" },
+          { viewType: "exterior", url: "", path: "", createdAt: "" },
+          { viewType: "bathroom", url: "", path: "", createdAt: "" },
+        ],
       },
       isAvailable: {
         type: DataTypes.BOOLEAN,

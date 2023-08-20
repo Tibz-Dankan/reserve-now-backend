@@ -117,13 +117,20 @@ const updateRoomBasicInfo = asyncHandler(async (req, res, next) => {
 });
 
 const updateRoomImage = asyncHandler(async (req, res, next) => {
+  console.log("req.file");
   console.log(req.file);
+  console.log("req.body");
+  console.log(req.body);
 
   const file = req.file;
   const id = req.params.id;
+  const viewType = req.body.viewType;
   if (!id) return next(new AppError("No room id is provided", 400));
   if (file == undefined) {
     return next(new AppError("Please provide a room image", 400));
+  }
+  if (!viewType) {
+    return next(new AppError("Please provide room viewType", 400));
   }
 
   const mimeType = mime.lookup(file.originalname);
@@ -136,15 +143,23 @@ const updateRoomImage = asyncHandler(async (req, res, next) => {
   const upload = await new Upload(imagePath, next).add(file);
   const url = upload.url;
 
-  const updateImage = await Room.update(
-    { images: { url: url, path: imagePath } },
-    { where: { id: id } }
-  );
+  const room = await Room.findOne({ where: { id: id } });
+  const roomImages = room.dataValues.images;
+
+  roomImages.map(async (image, index) => {
+    if (image.viewType === viewType) {
+      (roomImages[index].viewType = viewType),
+        (roomImages[index].url = url),
+        (roomImages[index].path = imagePath),
+        (roomImages[index].createdAt = new Date().toISOString());
+      await Room.update({ images: roomImages }, { where: { id: id } });
+    }
+  });
 
   res.status(200).json({
     status: "success",
-    message: "Image uploaded successfully",
-    data: updateImage,
+    message: `The ${viewType} image of ${room.roomName} has been uploaded successfully`,
+    data: null,
   });
 });
 
