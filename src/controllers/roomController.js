@@ -63,7 +63,7 @@ const getRoom = asyncHandler(async (req, res, next) => {
   const room = await Room.findOne({ where: { id: id } });
   if (!room) return next(new AppError("No room found", 404));
 
-  res.status(200).json({ status: "success", data: room });
+  res.status(200).json({ status: "success", data: { room: room } });
 });
 
 const updateRoomBasicInfo = asyncHandler(async (req, res, next) => {
