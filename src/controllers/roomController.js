@@ -1,4 +1,6 @@
 const Room = require("../models").Room;
+const Bed = require("../models").Bed;
+
 const { AppError } = require("../utils/error");
 const { asyncHandler } = require("../utils/asyncHandler");
 const mime = require("mime-types");
@@ -60,7 +62,18 @@ const getRoom = asyncHandler(async (req, res, next) => {
   const id = req.params.id;
   if (!id) return next(new AppError("No room id supplied", 400));
 
-  const room = await Room.findOne({ where: { id: id } });
+  const room = await Room.findOne({
+    where: { id: id },
+    include: [
+      {
+        model: Bed,
+        as: "beds",
+      },
+    ],
+  });
+
+  console.log("room");
+  console.log(room);
   if (!room) return next(new AppError("No room found", 404));
 
   res.status(200).json({ status: "success", data: { room: room } });
