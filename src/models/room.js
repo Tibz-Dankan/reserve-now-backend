@@ -77,7 +77,7 @@ module.exports = (sequelize, DataTypes) => {
       publish: {
         type: DataTypes.JSONB,
         defaultValue: {
-          isPublish: false,
+          isPublished: false,
           publishedAt: "",
         },
       },

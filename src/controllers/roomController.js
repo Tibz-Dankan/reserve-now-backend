@@ -151,12 +151,21 @@ const updateRoomImage = asyncHandler(async (req, res, next) => {
   if (!isImage) {
     return next(new AppError("Please provide file of image type", 400));
   }
+  const room = await Room.findOne({ where: { id: id } });
+  if (!room) {
+    return next(new AppError(`Room with id ${id} is not found`, 404));
+  }
+
+  return res.status(200).json({
+    status: "success",
+    message: `The ${viewType} image of ${room.dataValues.roomName} has been uploaded successfully`,
+    data: null,
+  });
 
   const imagePath = `rooms/${Date.now()}_${file.originalname}`;
   const upload = await new Upload(imagePath, next).add(file);
   const url = upload.url;
 
-  const room = await Room.findOne({ where: { id: id } });
   const roomImages = room.dataValues.images;
 
   roomImages.map(async (image, index) => {
@@ -172,6 +181,38 @@ const updateRoomImage = asyncHandler(async (req, res, next) => {
   res.status(200).json({
     status: "success",
     message: `The ${viewType} image of ${room.roomName} has been uploaded successfully`,
+    data: null,
+  });
+});
+
+const publishRoom = asyncHandler(async (req, res, next) => {
+  const id = req.params.id;
+  if (!id) return next(new AppError("No roomId is provided", 400));
+  const room = await Room.findOne({ where: { id: id } });
+  if (!room) {
+    return next(new AppError(`Room with id ${id} is not found`, 404));
+  }
+  if (room.dataValues.publish.isPublished) {
+    return next(
+      new AppError(
+        `Room with name ${room.dataValues.roomName} is already published`,
+        400
+      )
+    );
+  }
+  await Room.update(
+    {
+      publish: {
+        isPublished: true,
+        publishedAt: new Date().toISOString(),
+      },
+    },
+    { where: { id: id } }
+  );
+
+  res.status(200).json({
+    status: "success",
+    message: `${room.roomName} has been published successfully`,
     data: null,
   });
 });
@@ -196,5 +237,6 @@ module.exports = {
   getRoom,
   updateRoomBasicInfo,
   updateRoomImage,
+  publishRoom,
   searchRooms,
 };
