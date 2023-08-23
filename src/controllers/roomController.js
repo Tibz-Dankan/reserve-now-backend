@@ -53,7 +53,14 @@ const addRoomBasicInfo = asyncHandler(async (req, res, next) => {
 });
 
 const getAllRooms = asyncHandler(async (req, res, next) => {
-  const rooms = await Room.findAll();
+  const rooms = await Room.findAll({
+    include: [
+      {
+        model: Bed,
+        as: "beds",
+      },
+    ],
+  });
 
   res.status(200).json({ status: "success", data: rooms });
 });
@@ -156,17 +163,9 @@ const updateRoomImage = asyncHandler(async (req, res, next) => {
     return next(new AppError(`Room with id ${id} is not found`, 404));
   }
 
-  return res.status(200).json({
-    status: "success",
-    message: `The ${viewType} image of ${room.dataValues.roomName} has been uploaded successfully`,
-    data: null,
-  });
-
   const imagePath = `rooms/${Date.now()}_${file.originalname}`;
   const upload = await new Upload(imagePath, next).add(file);
   const url = upload.url;
-
-  const roomImages = room.dataValues.images;
 
   roomImages.map(async (image, index) => {
     if (image.viewType === viewType) {
