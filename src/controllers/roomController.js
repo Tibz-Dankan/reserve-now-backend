@@ -187,6 +187,7 @@ const updateRoomImage = asyncHandler(async (req, res, next) => {
   });
 });
 
+// TODO: add another api to endpoint to unpublish the room
 const publishRoom = asyncHandler(async (req, res, next) => {
   const id = req.params.id;
   if (!id) return next(new AppError("No roomId is provided", 400));
