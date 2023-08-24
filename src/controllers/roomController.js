@@ -167,6 +167,9 @@ const updateRoomImage = asyncHandler(async (req, res, next) => {
   const upload = await new Upload(imagePath, next).add(file);
   const url = upload.url;
 
+  const roomImages = room.dataValues.images;
+  // TODO: consider adding another point for specifically updating room images
+
   roomImages.map(async (image, index) => {
     if (image.viewType === viewType) {
       (roomImages[index].viewType = viewType),
@@ -179,7 +182,7 @@ const updateRoomImage = asyncHandler(async (req, res, next) => {
 
   res.status(200).json({
     status: "success",
-    message: `The ${viewType} image of ${room.roomName} has been uploaded successfully`,
+    message: `The ${viewType} image of ${room.dataValues.roomName} has been uploaded successfully`,
     data: null,
   });
 });
