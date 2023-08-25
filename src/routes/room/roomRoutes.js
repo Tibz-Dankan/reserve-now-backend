@@ -8,6 +8,7 @@ const {
   updateRoomImage,
   publishRoom,
   unPublishRoom,
+  deleteRoom,
 } = require("../../controllers/roomController");
 const { protect } = require("../../controllers/userController");
 const { uploadFile } = require("../../utils/upload");
@@ -22,6 +23,7 @@ router.patch("/update-room/:id", protect, updateRoomBasicInfo);
 router.patch("/update-room-image/:id", uploadFile, protect, updateRoomImage);
 router.patch("/publish-room/:id", protect, publishRoom);
 router.patch("/unpublish-room/:id", protect, unPublishRoom);
+router.delete("/delete-room/:id", protect, deleteRoom);
 
 const roomRoutes = router;
 module.exports = { roomRoutes };

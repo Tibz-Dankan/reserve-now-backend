@@ -267,6 +267,43 @@ const searchRooms = asyncHandler(async (req, res, next) => {
   res.status(200).json({ status: "success", data: [] });
 });
 
+const deleteRoom = asyncHandler(async (req, res, next) => {
+  const id = req.params.id;
+  if (!id) return next(new AppError("No roomId is provided", 400));
+  const room = await Room.findOne({ where: { id: id } });
+  if (!room) {
+    return next(new AppError(`Room with id ${id} is not found`, 404));
+  }
+  //TODO: validate to avoid deleting booked room
+
+  const roomImages = room.dataValues.images;
+  roomImages.map(async (image) => {
+    if (image.url && image.path) {
+      await new Upload(image.path, next).delete();
+    }
+  });
+
+  await Bed.destroy({
+    where: {
+      roomId: id,
+    },
+  });
+
+  await Room.destroy({
+    where: {
+      id: id,
+    },
+  });
+
+  res
+    .status(200)
+    .json({
+      status: "success",
+      message: "Room has been deleted successfully",
+      data: null,
+    });
+});
+
 module.exports = {
   addRoomBasicInfo,
   getAllRooms,
@@ -276,4 +313,5 @@ module.exports = {
   publishRoom,
   unPublishRoom,
   searchRooms,
+  deleteRoom,
 };

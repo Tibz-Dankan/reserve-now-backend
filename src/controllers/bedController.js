@@ -42,6 +42,9 @@ const updateBeds = asyncHandler(async (req, res, next) => {
   if (!bedTypes[0]) {
     return next(new AppError("Please provide at least one bed", 400));
   }
+  const room = await Room.findOne({ where: { id: roomId } });
+  if (!room) return next(new AppError(`Room with id: ${roomId}`, 400));
+
   // Delete all beds belonging to a room
   await Bed.destroy({
     where: {
