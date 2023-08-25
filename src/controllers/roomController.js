@@ -136,10 +136,8 @@ const updateRoomBasicInfo = asyncHandler(async (req, res, next) => {
   });
 });
 
-const updateRoomImage = asyncHandler(async (req, res, next) => {
-  console.log("req.file");
+const addRoomImage = asyncHandler(async (req, res, next) => {
   console.log(req.file);
-  console.log("req.body");
   console.log(req.body);
 
   const file = req.file;
@@ -295,13 +293,11 @@ const deleteRoom = asyncHandler(async (req, res, next) => {
     },
   });
 
-  res
-    .status(200)
-    .json({
-      status: "success",
-      message: "Room has been deleted successfully",
-      data: null,
-    });
+  res.status(200).json({
+    status: "success",
+    message: "Room has been deleted successfully",
+    data: null,
+  });
 });
 
 module.exports = {
@@ -309,7 +305,7 @@ module.exports = {
   getAllRooms,
   getRoom,
   updateRoomBasicInfo,
-  updateRoomImage,
+  addRoomImage,
   publishRoom,
   unPublishRoom,
   searchRooms,
