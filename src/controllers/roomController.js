@@ -187,7 +187,6 @@ const updateRoomImage = asyncHandler(async (req, res, next) => {
   });
 });
 
-// TODO: add another api to endpoint to unpublish the room
 const publishRoom = asyncHandler(async (req, res, next) => {
   const id = req.params.id;
   if (!id) return next(new AppError("No roomId is provided", 400));
@@ -212,11 +211,45 @@ const publishRoom = asyncHandler(async (req, res, next) => {
     },
     { where: { id: id } }
   );
+  const publishedRoom = await Room.findOne({ where: { id: id } });
 
   res.status(200).json({
     status: "success",
-    message: `${room.roomName} has been published successfully`,
-    data: null,
+    message: `${room.dataValues.roomName} has been published successfully`,
+    data: { room: publishedRoom },
+  });
+});
+
+const unPublishRoom = asyncHandler(async (req, res, next) => {
+  const id = req.params.id;
+  if (!id) return next(new AppError("No roomId is provided", 400));
+  const room = await Room.findOne({ where: { id: id } });
+  if (!room) {
+    return next(new AppError(`Room with id ${id} is not found`, 404));
+  }
+  if (!room.dataValues.publish.isPublished) {
+    return next(
+      new AppError(
+        `Room with name ${room.dataValues.roomName} is already unpublished`,
+        400
+      )
+    );
+  }
+  await Room.update(
+    {
+      publish: {
+        isPublished: false,
+        publishedAt: "",
+      },
+    },
+    { where: { id: id } }
+  );
+  const unPublishedRoom = await Room.findOne({ where: { id: id } });
+
+  res.status(200).json({
+    status: "success",
+    message: `${room.dataValues.roomName} has been unpublished successfully`,
+    data: { room: unPublishedRoom },
   });
 });
 
@@ -241,5 +274,6 @@ module.exports = {
   updateRoomBasicInfo,
   updateRoomImage,
   publishRoom,
+  unPublishRoom,
   searchRooms,
 };
