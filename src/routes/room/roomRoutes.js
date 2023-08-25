@@ -6,6 +6,7 @@ const {
   getRoom,
   updateRoomBasicInfo,
   addRoomImage,
+  updateRoomImage,
   publishRoom,
   unPublishRoom,
   deleteRoom,
@@ -21,6 +22,7 @@ router.get("/search-rooms", searchRooms);
 router.get("/get-room/:id", getRoom);
 router.patch("/update-room/:id", protect, updateRoomBasicInfo);
 router.post("/add-room-image/:id", uploadFile, protect, addRoomImage);
+router.patch("/update-room-image/:id", uploadFile, protect, updateRoomImage);
 router.patch("/publish-room/:id", protect, publishRoom);
 router.patch("/unpublish-room/:id", protect, unPublishRoom);
 router.delete("/delete-room/:id", protect, deleteRoom);

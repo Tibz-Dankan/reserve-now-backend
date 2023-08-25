@@ -137,9 +137,6 @@ const updateRoomBasicInfo = asyncHandler(async (req, res, next) => {
 });
 
 const addRoomImage = asyncHandler(async (req, res, next) => {
-  console.log(req.file);
-  console.log(req.body);
-
   const file = req.file;
   const id = req.params.id;
   const viewType = req.body.viewType;
@@ -164,9 +161,7 @@ const addRoomImage = asyncHandler(async (req, res, next) => {
   const imagePath = `rooms/${Date.now()}_${file.originalname}`;
   const upload = await new Upload(imagePath, next).add(file);
   const url = upload.url;
-
   const roomImages = room.dataValues.images;
-  // TODO: consider adding another point for specifically updating room images
 
   roomImages.map(async (image, index) => {
     if (image.viewType === viewType) {
@@ -178,6 +173,54 @@ const addRoomImage = asyncHandler(async (req, res, next) => {
     }
   });
 
+  res.status(200).json({
+    status: "success",
+    message: `The ${viewType} image of ${room.dataValues.roomName} has been uploaded successfully`,
+    data: null,
+  });
+});
+
+const updateRoomImage = asyncHandler(async (req, res, next) => {
+  const file = req.file;
+  const id = req.params.id;
+  const viewType = req.body.viewType;
+  if (!id) return next(new AppError("No room id is provided", 400));
+  if (file == undefined) {
+    return next(new AppError("Please provide a room image", 400));
+  }
+  if (!viewType) {
+    return next(new AppError("Please provide room viewType", 400));
+  }
+
+  const mimeType = mime.lookup(file.originalname);
+  const isImage = mimeType && mimeType.startsWith("image");
+  if (!isImage) {
+    return next(new AppError("Please provide file of image type", 400));
+  }
+  const room = await Room.findOne({ where: { id: id } });
+  if (!room) {
+    return next(new AppError(`Room with id ${id} is not found`, 404));
+  }
+
+  const imagePath = `rooms/${Date.now()}_${file.originalname}`;
+  const roomImages = room.dataValues.images;
+
+  roomImages.map(async (image, index) => {
+    if (image.viewType === viewType) {
+      let upload;
+      if (image.url && image.path) {
+        upload = await new Upload(imagePath, next).update(file, image.path);
+      } else {
+        upload = await new Upload(imagePath, next).add(file);
+      }
+      const url = upload.url;
+      (roomImages[index].viewType = viewType),
+        (roomImages[index].url = url),
+        (roomImages[index].path = imagePath),
+        (roomImages[index].createdAt = new Date().toISOString());
+      await Room.update({ images: roomImages }, { where: { id: id } });
+    }
+  });
   res.status(200).json({
     status: "success",
     message: `The ${viewType} image of ${room.dataValues.roomName} has been uploaded successfully`,
@@ -306,6 +349,7 @@ module.exports = {
   getRoom,
   updateRoomBasicInfo,
   addRoomImage,
+  updateRoomImage,
   publishRoom,
   unPublishRoom,
   searchRooms,
