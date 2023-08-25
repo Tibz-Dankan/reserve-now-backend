@@ -40,7 +40,7 @@ const signin = asyncHandler(async (req, res, next) => {
   const user = await User.findOne({ where: { email: email } });
   console.log(user);
   if (!user || !(await user.correctPassword(password, user.password))) {
-    return next(new AppError("Invalid email or password", 400));
+    return next(new AppError("Wrong email or password", 400));
   }
   await new Auth(user, 200, res).send();
 });
