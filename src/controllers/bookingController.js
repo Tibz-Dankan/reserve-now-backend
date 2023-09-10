@@ -5,6 +5,7 @@ const { AppError } = require("../utils/error");
 const { asyncHandler } = require("../utils/asyncHandler");
 const { Email } = require("../utils/email");
 const { Op } = require("sequelize");
+const { calTotalPrice } = require("../utils/calTotalPrice");
 
 const addBookingDates = asyncHandler(async (req, res, next) => {
   console.log(req.body);
@@ -28,29 +29,6 @@ const addBookingDates = asyncHandler(async (req, res, next) => {
   const bookingDates = await Booking.create(req.body);
   res.status(201).json({ status: "success", data: bookingDates });
 });
-
-const calTotalPrice = (checkInDate, checkOutDate, roomPrice) => {
-  if (!checkInDate || !checkOutDate) {
-    console.log("Please provide booking dates");
-    throw new Error(
-      "Sorry, something went wrong on our side, try again later!"
-    );
-  }
-  if (!roomPrice) {
-    console.log("Please provide the room price");
-    throw new Error(
-      "Sorry, something went wrong on our side, try again later!"
-    );
-  }
-  const oneDayMillSec = 1000 * 60 * 60 * 24;
-  const checkInMillSec = new Date(checkInDate).getTime();
-  const checkOutMillSec = new Date(checkOutDate).getTime();
-
-  const numOfNights = Math.floor(
-    (checkOutMillSec - checkInMillSec) / oneDayMillSec
-  );
-  return numOfNights * roomPrice;
-};
 
 const updateBooking = asyncHandler(async (req, res, next) => {
   const id = req.params.id; //bookingId

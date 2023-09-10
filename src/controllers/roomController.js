@@ -304,6 +304,8 @@ const searchRooms = asyncHandler(async (req, res, next) => {
   // const rooms = await Room.findAll();
   // Create A View with all rooms having bookings (>Now )
   // Create Another View of room without any booking (<Now || !booking)
+  // to add a utility function to do the sorting to return unbooked rooms
+  // To add a utility function  to compute the total of the booking
 
   res.status(200).json({ status: "success", data: [] });
 });
