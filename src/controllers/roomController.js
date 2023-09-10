@@ -7,6 +7,7 @@ const mime = require("mime-types");
 
 const { Upload } = require("../utils/upload");
 const path = require("path");
+const { bookingNumDays } = require("../utils/bookingNumDays");
 
 const addRoomBasicInfo = asyncHandler(async (req, res, next) => {
   const { roomType, roomName, capacity, price } = req.body;
@@ -295,19 +296,29 @@ const unPublishRoom = asyncHandler(async (req, res, next) => {
 });
 
 const searchRooms = asyncHandler(async (req, res, next) => {
-  console.log("req.body");
-  console.log(req.body);
-  console.log("req.params");
-  console.log(req.params);
-  console.log("req.query");
-  console.log(req.query);
+  const checkInDate = req.query.checkInDate.trim();
+  const checkOutDate = req.query.checkOutDate.trim();
+  const rooms = await Room.findAll({
+    include: [
+      {
+        model: Bed,
+        as: "beds",
+      },
+    ],
+  });
+
+  const bookingNumOfDays = bookingNumDays(checkInDate, checkOutDate);
+
   // const rooms = await Room.findAll();
   // Create A View with all rooms having bookings (>Now )
   // Create Another View of room without any booking (<Now || !booking)
   // to add a utility function to do the sorting to return unbooked rooms
   // To add a utility function  to compute the total of the booking
 
-  res.status(200).json({ status: "success", data: [] });
+  res.status(200).json({
+    status: "success",
+    data: { rooms: rooms, bookingNumberOfDays: bookingNumOfDays },
+  });
 });
 
 const deleteRoom = asyncHandler(async (req, res, next) => {
