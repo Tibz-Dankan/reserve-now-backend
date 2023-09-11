@@ -8,4 +8,6 @@ RUN npm install --only=prod
 
 COPY . .
 
+RUN  npm run migrate
+
 CMD ["npm", "start"]   
