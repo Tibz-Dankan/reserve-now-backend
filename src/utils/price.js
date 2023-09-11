@@ -36,7 +36,7 @@ class RoomPrice {
     const price = parseInt(this.roomArray[0].price.amount);
     const totalPrice = this.calTotalPrice(checkInDate, checkOutDate, price);
     const room = this.roomArray[0];
-    room.totalPrice = totalPrice;
+    room.price.total = totalPrice;
     return room;
   }
   manyRoom(checkInDate, checkOutDate) {
@@ -47,11 +47,10 @@ class RoomPrice {
     const rooms = [];
     this.roomArray.map((room) => {
       const currentRoom = room.dataValues;
-      console.log("currentRoom", currentRoom);
 
       const price = parseInt(currentRoom.price.amount);
       const totalPrice = this.calTotalPrice(checkInDate, checkOutDate, price);
-      currentRoom.totalPrice = totalPrice;
+      currentRoom.price.total = totalPrice;
       rooms.push(currentRoom);
     });
     console.log("rooms with total price", rooms);

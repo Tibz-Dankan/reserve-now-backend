@@ -309,8 +309,6 @@ const searchRooms = asyncHandler(async (req, res, next) => {
   });
 
   const bookingNumOfDays = bookingNumDays(checkInDate, checkOutDate);
-  console.log("rooms.dataValues");
-  console.log(rooms[0].dataValues);
 
   const roomsWithTotalPrice = new RoomPrice(rooms).manyRoom(
     checkInDate,
@@ -325,7 +323,6 @@ const searchRooms = asyncHandler(async (req, res, next) => {
 
   res.status(200).json({
     status: "success",
-    // data: { rooms: rooms, bookingNumberOfDays: bookingNumOfDays },
     data: { rooms: roomsWithTotalPrice, bookingNumberOfDays: bookingNumOfDays },
   });
 });
