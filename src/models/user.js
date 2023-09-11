@@ -90,6 +90,7 @@ module.exports = (sequelize, DataTypes) => {
     {
       sequelize,
       modelName: "User",
+      tableName: "_users",
     }
   );
 
