@@ -8,6 +8,7 @@ const mime = require("mime-types");
 const { Upload } = require("../utils/upload");
 const path = require("path");
 const { bookingNumDays } = require("../utils/bookingNumDays");
+const { RoomPrice } = require("../utils/price");
 
 const addRoomBasicInfo = asyncHandler(async (req, res, next) => {
   const { roomType, roomName, capacity, price } = req.body;
@@ -308,6 +309,13 @@ const searchRooms = asyncHandler(async (req, res, next) => {
   });
 
   const bookingNumOfDays = bookingNumDays(checkInDate, checkOutDate);
+  console.log("rooms.dataValues");
+  console.log(rooms[0].dataValues);
+
+  const roomsWithTotalPrice = new RoomPrice(rooms).manyRoom(
+    checkInDate,
+    checkOutDate
+  );
 
   // const rooms = await Room.findAll();
   // Create A View with all rooms having bookings (>Now )
@@ -317,7 +325,8 @@ const searchRooms = asyncHandler(async (req, res, next) => {
 
   res.status(200).json({
     status: "success",
-    data: { rooms: rooms, bookingNumberOfDays: bookingNumOfDays },
+    // data: { rooms: rooms, bookingNumberOfDays: bookingNumOfDays },
+    data: { rooms: roomsWithTotalPrice, bookingNumberOfDays: bookingNumOfDays },
   });
 });
 
