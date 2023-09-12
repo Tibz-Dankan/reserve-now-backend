@@ -323,7 +323,15 @@ const searchRooms = asyncHandler(async (req, res, next) => {
 
   res.status(200).json({
     status: "success",
-    data: { rooms: roomsWithTotalPrice, bookingNumberOfDays: bookingNumOfDays },
+    // data: { rooms: roomsWithTotalPrice, bookingNumberOfDays: bookingNumOfDays },
+    data: {
+      rooms: roomsWithTotalPrice,
+      bookingDates: {
+        numberOfDays: bookingNumOfDays,
+        checkInDate: checkInDate,
+        checkOutDate: checkOutDate,
+      },
+    },
   });
 });
 
