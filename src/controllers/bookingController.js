@@ -35,6 +35,7 @@ const addBooking = asyncHandler(async (req, res, next) => {
   rooms.map(async (room) => {
     await BookedRoom.create({ bookingId: bookingId, roomId: room.id });
   });
+  newBooking.dataValues.rooms = rooms;
 
   res.status(201).json({
     status: "success",
