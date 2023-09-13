@@ -46,9 +46,11 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
       },
       numOfGuests: {
-        type: DataTypes.INTEGER,
+        //TODO: Desired format {adults: 2, children:2 childAge:[child1:"2", child2:"12"]}
+        type: DataTypes.INTEGER, //To change the type to jsonb
       },
       bookingStage: {
+        //TO be removed
         type: DataTypes.ENUM(
           "selectBookingDates",
           "selectRoom",

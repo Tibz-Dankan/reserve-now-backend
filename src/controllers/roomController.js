@@ -9,6 +9,7 @@ const { Upload } = require("../utils/upload");
 const path = require("path");
 const { bookingNumDays } = require("../utils/bookingNumDays");
 const { RoomPrice } = require("../utils/price");
+const { parse } = require("dotenv");
 
 const addRoomBasicInfo = asyncHandler(async (req, res, next) => {
   const { roomType, roomName, capacity, price } = req.body;
@@ -297,6 +298,7 @@ const unPublishRoom = asyncHandler(async (req, res, next) => {
 });
 
 const searchRooms = asyncHandler(async (req, res, next) => {
+  console.log("req.query", req.query);
   const checkInDate = req.query.checkInDate.trim();
   const checkOutDate = req.query.checkOutDate.trim();
   const rooms = await Room.findAll({
@@ -314,6 +316,11 @@ const searchRooms = asyncHandler(async (req, res, next) => {
     checkInDate,
     checkOutDate
   );
+  const numOfGuests = {
+    adults: req.query.adults,
+    children: req.query.children,
+    childrenAge: JSON.parse(req.query.childrenAge),
+  };
 
   // const rooms = await Room.findAll();
   // Create A View with all rooms having bookings (>Now )
@@ -331,6 +338,7 @@ const searchRooms = asyncHandler(async (req, res, next) => {
         checkInDate: checkInDate,
         checkOutDate: checkOutDate,
       },
+      numOfGuests: numOfGuests,
     },
   });
 });

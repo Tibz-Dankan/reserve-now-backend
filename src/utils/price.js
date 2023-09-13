@@ -53,7 +53,6 @@ class RoomPrice {
       currentRoom.price.total = totalPrice;
       rooms.push(currentRoom);
     });
-    console.log("rooms with total price", rooms);
     return rooms;
   }
 }
