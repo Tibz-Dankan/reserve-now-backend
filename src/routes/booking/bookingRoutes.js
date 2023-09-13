@@ -1,6 +1,6 @@
 const express = require("express");
 const {
-  addBookingDates,
+  addBooking,
   updateBooking,
   getBooking,
   getBookingByUser,
@@ -10,7 +10,7 @@ const { protect } = require("../../controllers/userController");
 
 const router = express.Router();
 
-router.post("/add-booking-dates", protect, addBookingDates);
+router.post("/add-booking", protect, addBooking);
 router.patch("/update-booking/:id", protect, updateBooking);
 router.get("/get-booking/:id", protect, getBooking);
 router.get("/get-booking-by-user", protect, getBookingByUser);

@@ -1,15 +1,15 @@
 const Booking = require("../models").Booking;
 const Room = require("../models").Room;
 const User = require("../models").User;
+const BookedRoom = require("../models").BookedRoom;
 const { AppError } = require("../utils/error");
 const { asyncHandler } = require("../utils/asyncHandler");
 const { Email } = require("../utils/email");
 const { Op } = require("sequelize");
 const { calTotalPrice } = require("../utils/calTotalPrice");
 
-const addBookingDates = asyncHandler(async (req, res, next) => {
-  console.log(req.body);
-  //   TODO: to add timezone time date conversion to validate checkindate(checkin > now)
+const addBooking = asyncHandler(async (req, res, next) => {
+  console.log("req.body", req.body);
   const { checkInDate, checkOutDate, userId } = req.body;
   if (!userId) return next(new AppError("Please provide a userId", 400));
   if (!checkInDate || !checkOutDate) {
@@ -26,8 +26,23 @@ const addBookingDates = asyncHandler(async (req, res, next) => {
       new AppError("please provide valid check-in and check-out dates!", 400)
     );
   }
-  const bookingDates = await Booking.create(req.body);
-  res.status(201).json({ status: "success", data: bookingDates });
+  const rooms = req.body.rooms;
+  // TODO: validate rooms, numOfGuests, price(total and currency)
+  // return;
+  const newBooking = await Booking.create(req.body);
+  const bookingId = newBooking.dataValues.id;
+
+  rooms.map(async (room) => {
+    await BookedRoom.create({ bookingId: bookingId, roomId: room.id });
+  });
+
+  res.status(201).json({
+    status: "success",
+    message: "Booking made successfully",
+    data: {
+      newBooking: newBooking,
+    },
+  });
 });
 
 const updateBooking = asyncHandler(async (req, res, next) => {
@@ -83,12 +98,13 @@ const getBookingByUser = asyncHandler(async (req, res, next) => {
 });
 
 const getAllBookings = asyncHandler(async (req, res, next) => {
+  // TODO: to add pagination
   const bookings = await Booking.findAll();
   res.status(200).json({ status: "success", data: bookings });
 });
 
 module.exports = {
-  addBookingDates,
+  addBooking,
   updateBooking,
   getBooking,
   getBookingByUser,

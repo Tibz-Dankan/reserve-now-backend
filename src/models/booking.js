@@ -8,14 +8,13 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      Booking.belongsTo(models.Room, {
-        foreignKey: "roomId",
-        as: "room",
-      });
-
       Booking.belongsTo(models.User, {
         foreignKey: "userId",
         as: "user",
+      });
+      Booking.hasMany(models.BookedRoom, {
+        foreignKey: "bookingId",
+        as: "bookedRooms",
       });
       // TODO: To define a one2one association btn booking and payment
     }
@@ -31,9 +30,6 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.INTEGER,
         allowNull: false,
       },
-      roomId: {
-        type: DataTypes.INTEGER,
-      },
       paymentId: {
         type: DataTypes.INTEGER,
       },
@@ -46,17 +42,8 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
       },
       numOfGuests: {
-        //TODO: Desired format {adults: 2, children:2 childAge:[child1:"2", child2:"12"]}
-        type: DataTypes.INTEGER, //To change the type to jsonb
-      },
-      bookingStage: {
-        //TO be removed
-        type: DataTypes.ENUM(
-          "selectBookingDates",
-          "selectRoom",
-          "selectPaymentOption"
-        ),
-        defaultValue: "selectBookingDates",
+        type: DataTypes.JSONB, //format {adults: 2, children:2 childrenAge:[child1:"2", child2:"12"]}
+        allowNull: false,
       },
       bookingStatus: {
         type: DataTypes.ENUM("confirmed", "cancelled", "pending"),
@@ -66,23 +53,14 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.ENUM("paid", "unpaid"),
         defaultValue: "unpaid",
       },
-      totalPrice: {
-        type: DataTypes.INTEGER,
-      },
-      priceCurrency: {
-        type: DataTypes.STRING,
+      price: {
+        type: DataTypes.JSONB, //format {total: 2, currency:"USD"}
       },
       specialRequests: {
         type: DataTypes.STRING,
       },
-      createdAt: {
-        type: DataTypes.DATE,
-        defaultValue: Sequelize.NOW,
-      },
-      updatedAt: {
-        type: DataTypes.DATE,
-        defaultValue: Sequelize.NOW,
-      },
+      createdAt: DataTypes.DATE,
+      updatedAt: DataTypes.DATE,
     },
     {
       sequelize,
